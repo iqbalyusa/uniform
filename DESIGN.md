@@ -207,6 +207,10 @@ All keyboard targets use a 3px theme-aware focus outline with a 3px offset. Pres
 
 Fields are white, thinly bordered, and gently rounded. Form controls have a minimum 42px height and 13px field text. Search fields combine an inline SVG with compact input text and a focus-within ring. Place the label above each form control; helper text explains old/new size rules or validation. Errors use explicit text on a pale red surface.
 
+### Multi-uniform stock-out
+
+A student purchase uses one recipient section and flat, numbered uniform groups separated by divider lines. The add and remove controls have 44px touch targets; adding a uniform focuses its name selector. Multiple items share a review showing every uniform, size system, quantity, and before/after balance. Insufficient balances retain explicit red text. The review stays available beside the desktop form and follows it on mobile. Mobile form controls use 16px text, and the form is disabled while saving.
+
 ### Navigation
 
 The rail has the school logo directly on its surface, a white destination list, and the current shared-mode indicator at the bottom (account details when accounts are enabled). Navigation targets have a minimum 44px height. Active destinations use pale blue, blue text, weight 700, and a blue dot; hover uses a soft surface. On mobile, the menu opens the drawer and the backdrop closes it. A destination selection closes the drawer.
