@@ -1,9 +1,9 @@
-import { env } from 'cloudflare:workers';
+import { getDatabase } from './database';
 import { getChatGPTUser } from './identity';
 import { accountsEnabled } from './access';
 import { staffNames,allKeys,localDate,validateKey,validateQuantity,type Member } from './catalog';
 export class ApiError extends Error{constructor(message:string,public status=400){super(message);}}
-export function database(){if(!env.DB)throw new ApiError('Database belum terhubung. Hubungi administrator.',503);return env.DB;}
+export function database(){const db=getDatabase();if(!db)throw new ApiError('Database belum terhubung. Hubungi administrator.',503);return db;}
 const initialAdmins=[['rahma@pribadidepok.sch.id','Rahma'],['afro@pribadidepok.sch.id','Afro']];
 export async function actor(request?:Request){
  const db=database();
@@ -67,7 +67,7 @@ async function purchase(member:Member,data:any){
  const staff=selectedStaff(data),now=new Date().toISOString(),statements=[];
  lines.forEach((line,index)=>{
   const lineId=index===0?id:`${id}:${index}`;
-  // A revision conflict violates the stock guard, rolling back the entire D1 batch.
+  // A revision conflict violates the stock guard, rolling back the entire batch.
   statements.push(db.prepare('UPDATE stock SET quantity=CASE WHEN revision=? THEN quantity-? ELSE -1 END,revision=revision+1,last_change=? WHERE key=?').bind(line.revision,line.quantity,lineId,line.key));
   statements.push(db.prepare('INSERT INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,staff_name,note,source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(lineId,line.key,'Keluar',member.id,member.name,now,date,line.before,line.before-line.quantity,-line.quantity,student,cls,staff,note,'app'));
  });
@@ -89,7 +89,7 @@ export async function importStock(member:Member,data:any){
  inventoryEditor(member);const db=database();const id=required(data.id,'ID permintaan',100);if(await db.prepare('SELECT id FROM history WHERE id=?').bind(id).first())return {replayed:true};if(!Array.isArray(data.rows)||!data.rows.length||data.rows.length>allKeys.length)throw new ApiError(`Impor harus berisi 1–${allKeys.length} kombinasi stok.`);if(!['set','add'].includes(data.mode))throw new ApiError('Mode impor tidak valid.');
  const seen=new Set<string>();for(const row of data.rows){validateKey(row.key);validateQuantity(row.quantity);if(seen.has(row.key))throw new ApiError('Kombinasi seragam/ukuran duplikat.');seen.add(row.key);}const state=await snapshot(member);if(data.revision!==state.revision)throw new ApiError('Data berubah sejak pratinjau. Buat pratinjau kembali.',409);const now=new Date().toISOString();const backup=await fullBackup(member);const guard=crypto.randomUUID();
  const statements=[db.prepare('INSERT INTO backups (id,created_at,actor,data) SELECT CASE WHEN revision=? THEN ? ELSE NULL END,?,?,? FROM settings WHERE id=1').bind(data.revision,guard,now,member.name,JSON.stringify(backup))];
- // Twenty rows per statement stay within D1's parameter and request-query limits.
+ // Twenty rows per statement stay well within SQLite's parameter limits.
  for(let offset=0;offset<data.rows.length;offset+=20){const chunk=data.rows.slice(offset,offset+20);const parameters:unknown[]=[];for(const row of chunk){const after=data.mode==='add'?state.stock[row.key].quantity+row.quantity:row.quantity;validateQuantity(after);parameters.push(row.key,after,id);}statements.push(db.prepare(`INSERT INTO stock (key,quantity,revision,last_change) VALUES ${chunk.map(()=>'(?,?,1,?)').join(',')} ON CONFLICT(key) DO UPDATE SET quantity=excluded.quantity,revision=stock.revision+1,last_change=excluded.last_change`).bind(...parameters));}
  const total=data.rows.reduce((sum:number,row:any)=>sum+row.quantity,0);statements.push(db.prepare("INSERT INTO history (id,action,actor_id,actor,occurred_at,date,note,source) VALUES (?,'Impor stok',?,?,?,?,?,'import')").bind(id,member.id,member.name,now,localDate(),`${data.rows.length} kombinasi · ${total} pcs · ${data.mode==='add'?'ditambahkan':'mengganti hanya kombinasi dalam berkas'} · ${String(data.filename??'Berkas').slice(0,200)} · cadangan ${guard}`));
  statements.push(db.prepare("INSERT INTO history (id,action,actor_id,actor,occurred_at,date,note,source) VALUES (?,'Rincian impor',?,?,?,?,?,'import')").bind(`${id}:details`,member.id,member.name,now,localDate(),JSON.stringify(data.rows.map((r:any)=>({key:r.key,before:state.stock[r.key].quantity,after:data.mode==='add'?state.stock[r.key].quantity+r.quantity:r.quantity})))));

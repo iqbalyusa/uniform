@@ -1,14 +1,12 @@
 import { build } from 'esbuild';
-import { mkdir,readFile,writeFile,readdir,cp,rm } from 'node:fs/promises';
+import { mkdir,writeFile,cp,rm } from 'node:fs/promises';
 import { resolve,relative,join } from 'node:path';
-const root=process.cwd(),dist=resolve(root,'dist');if(relative(root,dist)!=='dist')throw Error('Invalid build directory');await rm(dist,{recursive:true,force:true});await mkdir(join(dist,'server'),{recursive:true});await mkdir(join(dist,'.openai'),{recursive:true});
-const client=await build({entryPoints:['app/client.tsx'],outdir:'dist/client/assets',bundle:true,splitting:true,format:'esm',platform:'browser',minify:true,metafile:true,entryNames:'app-[hash]',chunkNames:'chunk-[hash]',publicPath:'/assets/',define:{'process.env.NODE_ENV':'"production"'},target:['es2022'],loader:{'.woff2':'file','.woff':'file','.png':'file'},logLevel:'info'});
+const root=process.cwd(),dist=resolve(root,'dist');if(relative(root,dist)!=='dist')throw Error('Invalid build directory');await rm(dist,{recursive:true,force:true});
+const publicDir=join(dist,'public');await mkdir(publicDir,{recursive:true});await cp('public',publicDir,{recursive:true});
+const client=await build({entryPoints:['app/client.tsx'],outdir:join(publicDir,'assets'),bundle:true,splitting:true,format:'esm',platform:'browser',minify:true,metafile:true,entryNames:'app-[hash]',chunkNames:'chunk-[hash]',publicPath:'/assets/',define:{'process.env.NODE_ENV':'"production"'},target:['es2022'],loader:{'.woff2':'file','.woff':'file','.png':'file'},logLevel:'info'});
 const outputs=Object.keys(client.metafile.outputs),main=outputs.find(p=>client.metafile.outputs[p].entryPoint==='app/client.tsx'&&p.endsWith('.js')),css=outputs.find(p=>p.endsWith('.css'));
-const assets={};for(const file of outputs){const extension=file.split('.').pop();const type={css:'text/css; charset=utf-8',js:'text/javascript; charset=utf-8',woff2:'font/woff2',woff:'font/woff',png:'image/png'}[extension];if(!type)throw Error('Unsupported asset '+file);const base64=!['css','js'].includes(extension);assets[`/assets/${file.split('/').pop()}`]={body:(await readFile(file)).toString(base64?'base64':'utf8'),type,base64};}
-const html=`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#12233c"><title>Pribadi · Manajemen Seragam</title><meta name="description" content="Stok seragam bersama untuk SD, SMP, dan SMA Pribadi."><link rel="stylesheet" href="/assets/${css.split('/').pop()}"></head><body><div id="app"></div><script type="module" src="/assets/${main.split('/').pop()}"></script></body></html>`;
-const assetPlugin={name:'site-assets',setup(b){b.onResolve({filter:/^virtual:site-assets$/},()=>({path:'assets',namespace:'virtual'}));b.onLoad({filter:/.*/,namespace:'virtual'},()=>({contents:`export const assets=${JSON.stringify(assets)};export const html=${JSON.stringify(html)};`}));}};
-await build({entryPoints:['worker/index.ts'],outfile:'dist/server/index.js',bundle:true,format:'esm',platform:'neutral',external:['cloudflare:workers'],target:'es2022',plugins:[assetPlugin],minify:true,logLevel:'info'});
-await cp('.openai/hosting.json','dist/.openai/hosting.json');await cp('drizzle','dist/.openai/drizzle',{recursive:true});
-// Local preview uses the exact Worker and SQL via a loopback-only Node adapter.
-await build({entryPoints:['worker/index.ts'],outfile:'.sites-runtime/preview-worker.mjs',bundle:true,format:'esm',platform:'node',target:'es2022',plugins:[assetPlugin,{name:'local-db',setup(b){b.onResolve({filter:/^cloudflare:workers$/},()=>({path:'env',namespace:'local'}));b.onLoad({filter:/.*/,namespace:'local'},()=>({contents:'export const env=globalThis.localEnv;'}));}}]});
-console.log('Built Worker, browser assets, and versioned D1 migrations.');
+if(!main||!css)throw Error('Browser entry or stylesheet missing');
+const name=p=>p.split('/').pop();
+await writeFile(join(publicDir,'index.html'),`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#12233c"><title>Pribadi · Manajemen Seragam</title><meta name="description" content="Stok seragam bersama untuk SD, SMP, dan SMA Pribadi."><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/${name(css)}"></head><body><div id="app"></div><script type="module" src="/assets/${name(main)}"></script></body></html>`);
+await build({entryPoints:['server/api.ts'],outfile:join(dist,'api.mjs'),bundle:true,format:'esm',platform:'node',target:'node22',minify:true,logLevel:'info'});
+console.log('Built browser assets (dist/public) and Node.js API (dist/api.mjs).');
