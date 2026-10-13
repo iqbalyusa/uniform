@@ -15,7 +15,7 @@ const service=await import(`data:text/javascript;base64,${Buffer.from(result.out
 globalThis.testUser={userId:'rahma-id',email:'rahma@pribadidepok.sch.id',displayName:'Rahma'};
 const admin=await service.actor();
 const key='13|Baru|9';
-const move=(overrides={})=>({id:crypto.randomUUID(),key,action:'Masuk',quantity:10,revision:0,date:'2026-01-01',...overrides});
+const move=(overrides={})=>({id:crypto.randomUUID(),key,action:'Masuk',staffName:'Iin Rosita',quantity:10,revision:0,date:'2026-01-01',...overrides});
 test('authenticated listed accounts bind stable identity; others are denied',async()=>{assert.equal(admin.role,'admin');globalThis.testUser={userId:'unknown',email:'unknown@example.com'};await assert.rejects(service.actor(),/belum diberi akses/);globalThis.testUser=null;await assert.rejects(service.actor(),/Silakan masuk/);globalThis.testUser={userId:'rahma-id',email:'rahma@pribadidepok.sch.id'};});
 test('receipts, required recipients, and negative balance protection',async()=>{await service.movement(admin,move());assert.equal(sqlite.prepare('SELECT quantity FROM stock WHERE key=?').get(key).quantity,10);await assert.rejects(service.movement(admin,move({action:'Masuk',key:'13|Lama|9-10'})),/ukuran Baru/);await assert.rejects(service.movement(admin,move({action:'Keluar',quantity:1,revision:1})),/Nama siswa/);await assert.rejects(service.movement(admin,move({action:'Keluar',quantity:11,revision:1,studentName:'Test siswa',studentClass:'7A'})),/tidak cukup/);assert.throws(()=>sqlite.prepare('UPDATE stock SET quantity=-1 WHERE key=?').run(key),/invalid stock quantity/);});
 test('concurrent issues cannot overdraw and write exactly one audit entry',async()=>{const records=await Promise.allSettled([service.movement(admin,move({action:'Keluar',quantity:7,revision:1,studentName:'Siswa A',studentClass:'7A'})),service.movement(admin,move({action:'Keluar',quantity:7,revision:1,studentName:'Siswa B',studentClass:'7B'}))]);assert.equal(records.filter(r=>r.status==='fulfilled').length,1);assert.equal(sqlite.prepare('SELECT quantity FROM stock WHERE key=?').get(key).quantity,3);assert.equal(sqlite.prepare("SELECT count(*) AS n FROM history WHERE action='Keluar'").get().n,1);});
@@ -35,25 +35,25 @@ test('history returns records with blank date filters and respects a supplied ra
 
 test('one student purchase updates multiple uniforms once and records each item',async()=>{
  const state=await service.snapshot(admin),keys=['0|Baru|1','1|Baru|2'];
- const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa pembelian',studentClass:'7A',date:'2026-01-01',note:'Dua seragam',items:keys.map(key=>({key,quantity:1,revision:state.stock[key].revision}))};
+ const request={id:crypto.randomUUID(),action:'Keluar',staffName:'Rahmawati',studentName:'Siswa pembelian',studentClass:'7A',date:'2026-01-01',note:'Dua seragam',items:keys.map(key=>({key,quantity:1,revision:state.stock[key].revision}))};
  await service.movement(admin,request);await service.movement(admin,request);
  const after=await service.snapshot(admin);
  for(const key of keys)assert.equal(after.stock[key].quantity,state.stock[key].quantity-1);
  const history=after.history.filter(h=>h.id===request.id||h.id.startsWith(request.id+':'));
- assert.equal(history.length,2);assert.ok(history.every(h=>h.student_name===request.studentName&&h.student_class==='7A'&&h.delta===-1));
+ assert.equal(history.length,2);assert.ok(history.every(h=>h.student_name===request.studentName&&h.student_class==='7A'&&h.delta===-1&&h.staff_name==='Rahmawati'));
  assert.equal(after.revision,state.revision+1);
 });
 
 test('an unavailable later purchase item leaves all quantities and history unchanged',async()=>{
  const state=await service.snapshot(admin),keys=['2|Baru|1','3|Baru|1'];
- const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',items:keys.map((key,i)=>({key,quantity:i?state.stock[key].quantity+1:1,revision:state.stock[key].revision}))};
+ const request={id:crypto.randomUUID(),action:'Keluar',staffName:'Rahmawati',studentName:'Siswa',studentClass:'7A',items:keys.map((key,i)=>({key,quantity:i?state.stock[key].quantity+1:1,revision:state.stock[key].revision}))};
  await assert.rejects(service.movement(admin,request),/tidak cukup/);
  const after=await service.snapshot(admin);assert.deepEqual(after.stock,state.stock);assert.deepEqual(after.history,state.history);assert.equal(after.revision,state.revision);
 });
 
 test('purchase rejects missing student details, duplicate sizes and invalid quantities',async()=>{
  const state=await service.snapshot(admin),key='4|Baru|1',line={key,quantity:1,revision:state.stock[key].revision};
- const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',items:[line]};
+ const request={id:crypto.randomUUID(),action:'Keluar',staffName:'Rahmawati',studentName:'Siswa',studentClass:'7A',items:[line]};
  await assert.rejects(service.movement(admin,{...request,studentName:''}),/Nama siswa/);
  await assert.rejects(service.movement(admin,{...request,studentClass:''}),/Kelas/);
  await assert.rejects(service.movement(admin,{...request,items:[line,line]}),/Gabungkan/);
@@ -64,7 +64,7 @@ test('purchase rejects missing student details, duplicate sizes and invalid quan
 
 test('a concurrent stock revision on the second item rolls back the first item and its audit',async()=>{
  const state=await service.snapshot(admin),keys=['5|Baru|1','6|Baru|1'];
- const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',items:keys.map(key=>({key,quantity:1,revision:state.stock[key].revision}))};
+ const request={id:crypto.randomUUID(),action:'Keluar',staffName:'Rahmawati',studentName:'Siswa',studentClass:'7A',items:keys.map(key=>({key,quantity:1,revision:state.stock[key].revision}))};
  const db=globalThis.testEnv.DB,originalBatch=db.batch;
  db.batch=async statements=>{sqlite.prepare('UPDATE stock SET revision=revision+1 WHERE key=?').run(keys[1]);return originalBatch(statements);};
  try{await assert.rejects(service.movement(admin,request),/Stok berubah/);}finally{db.batch=originalBatch;}
@@ -76,9 +76,36 @@ test('a concurrent stock revision on the second item rolls back the first item a
 
 test('concurrent multi-item purchases cannot partially save or overdraw stock',async()=>{
  const state=await service.snapshot(admin),keys=['7|Baru|1','8|Baru|1'];
- const request={action:'Keluar',studentName:'Siswa',studentClass:'7A',items:keys.map(key=>({key,quantity:2,revision:state.stock[key].revision}))};
+ const request={action:'Keluar',staffName:'Rahmawati',studentName:'Siswa',studentClass:'7A',items:keys.map(key=>({key,quantity:2,revision:state.stock[key].revision}))};
  const results=await Promise.allSettled([service.movement(admin,{...request,id:crypto.randomUUID()}),service.movement(admin,{...request,id:crypto.randomUUID()})]);
  assert.equal(results.filter(r=>r.status==='fulfilled').length,1);
  const after=await service.snapshot(admin);for(const key of keys)assert.equal(after.stock[key].quantity,state.stock[key].quantity-2);
  assert.equal(after.history.length,state.history.length+2);assert.equal(after.revision,state.revision+1);
+});
+
+test('receipts record the selected staff separately from the authenticated actor',async()=>{
+ for(const staffName of ['Iin Rosita','Afro Mutmainah','Rahmawati']){
+  const state=await service.snapshot(admin),key='10|Baru|2';
+  const request=move({key,quantity:1,revision:state.stock[key].revision,staffName});await service.movement(admin,request);
+  const row=sqlite.prepare('SELECT * FROM history WHERE id=?').get(request.id);
+  assert.equal(row.staff_name,staffName);assert.equal(row.actor_id,admin.id);assert.equal(row.actor,admin.name);
+  const backup=await service.fullBackup(admin);assert.equal(backup.history.find(h=>h.id===request.id).staff_name,staffName);
+ }
+});
+
+test('missing and unlisted staff cannot change stock in receipts or student purchases',async()=>{
+ const before=await service.snapshot(admin),key='11|Baru|2';
+ for(const staffName of [undefined,'','Unknown staff']){
+  await assert.rejects(service.movement(admin,move({key,quantity:1,revision:before.stock[key].revision,staffName})),/Staff/);
+  await assert.rejects(service.movement(admin,{id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',staffName,items:[{key,quantity:1,revision:before.stock[key].revision}]}),/Staff/);
+ }
+ const after=await service.snapshot(admin);assert.deepEqual(after.stock,before.stock);assert.deepEqual(after.history,before.history);
+});
+
+test('staff migration preserves historical attribution and quantities',()=>{
+ const legacy=new DatabaseSync(':memory:');
+ for(const file of ['0000_pretty_johnny_storm.sql','0001_ledger_guards.sql'])legacy.exec(readFileSync(`drizzle/${file}`,'utf8'));
+ legacy.exec("INSERT INTO history (id,action,actor_id,actor,occurred_at,date) VALUES ('legacy','Masuk','original','Original actor','2026-01-01','2026-01-01'); INSERT INTO stock (key,quantity) VALUES ('0|Baru|1',9);");
+ legacy.exec(readFileSync('drizzle/0002_movement_staff.sql','utf8'));
+ const row=legacy.prepare("SELECT * FROM history WHERE id='legacy'").get();assert.equal(row.actor,'Original actor');assert.equal(row.staff_name,'');assert.equal(legacy.prepare('SELECT quantity FROM stock').get().quantity,9);legacy.close();
 });

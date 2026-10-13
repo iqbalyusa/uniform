@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers';
 import { getChatGPTUser } from './identity';
 import { accountsEnabled } from './access';
-import { allKeys,localDate,validateKey,validateQuantity,type Member } from './catalog';
+import { staffNames,allKeys,localDate,validateKey,validateQuantity,type Member } from './catalog';
 export class ApiError extends Error{constructor(message:string,public status=400){super(message);}}
 export function database(){if(!env.DB)throw new ApiError('Database belum terhubung. Hubungi administrator.',503);return env.DB;}
 const initialAdmins=[['rahma@pribadidepok.sch.id','Rahma'],['afro@pribadidepok.sch.id','Afro']];
@@ -29,19 +29,21 @@ export async function fullBackup(member:Member){
  return {schemaVersion:2,exportedAt:new Date().toISOString(),stock,history:history.results,lowLimit:(prefs.results[0] as any)?.low_limit??5,revision:(prefs.results[0] as any)?.revision??0};
 }
 function required(value:unknown,label:string,max=200){if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new ApiError(`${label} wajib diisi (maksimal ${max} karakter).`);return value.trim();}
+function selectedStaff(data:any){const name=required(data.staffName,'Staff',100);if(!staffNames.some(staff=>staff===name))throw new ApiError('Pilih Staff dari daftar yang tersedia.');return name;}
 export async function movement(member:Member,data:any){
  if(data.items!==undefined)return purchase(member,data);
  const db=database();validateKey(data.key);const id=required(data.id,'ID permintaan',100);const prior=await db.prepare('SELECT actor_id FROM history WHERE id=?').bind(id).first<{actor_id:string}>();if(prior){if(prior.actor_id!==member.id)throw new ApiError('ID permintaan sudah digunakan.',409);return {replayed:true};}
  const action=data.action;if(!['Masuk','Keluar','Penyesuaian'].includes(action))throw new ApiError('Jenis perubahan tidak valid.');if(action==='Penyesuaian')inventoryEditor(member);if(action==='Masuk'&&data.key.split('|')[1]!=='Baru')throw new ApiError('Penerimaan baru harus memakai sistem ukuran Baru.');
  const current=await db.prepare('SELECT quantity,revision FROM stock WHERE key=?').bind(data.key).first<{quantity:number;revision:number}>();const before=current?.quantity??0,revision=current?.revision??0;if(data.revision!==revision)throw new ApiError('Stok berubah oleh petugas lain. Muat ulang dan periksa jumlah terbaru.',409);
  validateQuantity(data.quantity);if(action!=='Penyesuaian'&&data.quantity===0)throw new ApiError('Jumlah harus lebih dari 0.');if(action==='Keluar'&&data.quantity>before)throw new ApiError(`Stok tidak cukup. Tersedia ${before} pcs.`,409);
+ const staff=action==='Penyesuaian'?'':selectedStaff(data);
  const after=action==='Penyesuaian'?data.quantity:before+(action==='Masuk'?data.quantity:-data.quantity);validateQuantity(after);
  const note=action==='Penyesuaian'?required(data.note,'Alasan penyesuaian',1000):String(data.note??'').slice(0,1000);const student=action==='Keluar'?required(data.studentName,'Nama siswa'):'';const cls=action==='Keluar'?required(data.studentClass,'Kelas',50):'';
  const date=data.date??localDate();if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||date>localDate())throw new ApiError('Tanggal tidak valid atau berada di masa depan.');const now=new Date().toISOString();
  const result=await db.batch([
   db.prepare('INSERT OR IGNORE INTO stock (key,quantity,revision) VALUES (?,0,0)').bind(data.key),
   db.prepare('UPDATE stock SET quantity=?,revision=revision+1,last_change=? WHERE key=? AND revision=?').bind(after,id,data.key,revision),
-  db.prepare('INSERT OR IGNORE INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,note,source) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM stock WHERE key=? AND last_change=?').bind(id,data.key,action,member.id,member.name,now,date,before,after,after-before,student,cls,note,'app',data.key,id),
+  db.prepare('INSERT OR IGNORE INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,staff_name,note,source) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM stock WHERE key=? AND last_change=?').bind(id,data.key,action,member.id,member.name,now,date,before,after,after-before,student,cls,staff,note,'app',data.key,id),
   db.prepare('UPDATE settings SET revision=revision+1 WHERE id=1 AND EXISTS (SELECT 1 FROM history WHERE id=?)').bind(id),
  ]);if(!result[2].meta.changes)throw new ApiError('Stok berubah oleh petugas lain. Muat ulang sebelum menyimpan.',409);return {id,before,after};
 }
@@ -62,12 +64,12 @@ async function purchase(member:Member,data:any){
   if(item.quantity>before)throw new ApiError(`Stok tidak cukup untuk seragam ${lines.length+1}. Tersedia ${before} pcs.`,409);
   lines.push({key:item.key,quantity:item.quantity,before,revision});
  }
- const now=new Date().toISOString(),statements=[];
+ const staff=selectedStaff(data),now=new Date().toISOString(),statements=[];
  lines.forEach((line,index)=>{
   const lineId=index===0?id:`${id}:${index}`;
   // A revision conflict violates the stock guard, rolling back the entire D1 batch.
   statements.push(db.prepare('UPDATE stock SET quantity=CASE WHEN revision=? THEN quantity-? ELSE -1 END,revision=revision+1,last_change=? WHERE key=?').bind(line.revision,line.quantity,lineId,line.key));
-  statements.push(db.prepare('INSERT INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,note,source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(lineId,line.key,'Keluar',member.id,member.name,now,date,line.before,line.before-line.quantity,-line.quantity,student,cls,note,'app'));
+  statements.push(db.prepare('INSERT INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,staff_name,note,source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(lineId,line.key,'Keluar',member.id,member.name,now,date,line.before,line.before-line.quantity,-line.quantity,student,cls,staff,note,'app'));
  });
  statements.push(db.prepare('UPDATE settings SET revision=revision+1 WHERE id=1'));
  try{await db.batch(statements);}catch(error){

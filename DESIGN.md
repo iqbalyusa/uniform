@@ -267,3 +267,7 @@ Audit: the original hierarchy made four stock totals equally prominent, labels a
 Desktop navigation is 248px wide, narrowing to 224px on compact screens; mobile uses the existing off-canvas drawer. Headlines use 32px desktop and 25–27px mobile. Controls use 44px or larger targets, 13–14px desktop text, and 16px mobile field text. Panels use 16px corners and controls use 10px corners. Hover and press feedback are restrained; the short page-heading entrance respects reduced motion. Dark mode preserves the same hierarchy and semantic status colours.
 
 Preserve the removed workspace/database/mode labels and explanation card. Stock matrices retain horizontal scrolling, exact-size handoff, and complete quantities. Multiple-item student purchases retain atomic saving, validation, and their complete before/after stock review.
+
+## Staff on stock movements
+
+Stok masuk and Stok keluar end with a required Staff selector after Catatan and before Save. Options are Iin Rosita, Afro Mutmainah, and Rahmawati, with no name selected by default. One selection applies to every uniform in a student purchase. The selected staff name is stored separately from the request actor, appears in activity lists, can be searched, and is included in history exports and backups. Legacy records keep their original attribution.

@@ -17,7 +17,7 @@ async function fixture(){
  const post=(path,data,origin='https://example.com')=>route.POST(new Request(`https://example.com/api/${path}`,{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(data)}));
  return {sqlite,get,post};
 }
-const move=(data={})=>({id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',quantity:2,revision:0,date:'2026-01-01',...data});
+const move=(data={})=>({id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',staffName:'Iin Rosita',quantity:2,revision:0,date:'2026-01-01',...data});
 
 test('anonymous state is editable, officer records stay private and recoverable',async()=>{
  const {sqlite,get,post}=await fixture();const before=sqlite.prepare('SELECT * FROM members ORDER BY id').all();
