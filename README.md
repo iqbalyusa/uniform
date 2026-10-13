@@ -53,6 +53,10 @@ Database sengaja disimpan di luar folder aplikasi dan `public_html`, sehingga pe
 
 Untuk pembaruan: `git pull`, `npm ci --include=dev`, `npm run build`, lalu Restart. Data tetap di `~/seragam-data/inventory.sqlite`.
 
+### Menyalin data dari Cloudflare
+
+`node scripts/import-cloudflare.mjs` mengunduh stok, seluruh riwayat, pengaturan, dan cadangan tersimpan dari versi Cloudflare lama, lalu memasukkannya ke database dalam satu transaksi. Skrip hanya mau mengisi database yang masih kosong; pindahkan database lama terlebih dahulu (mis. `mv ~/seragam-data ~/seragam-data-lama`) dan hentikan aplikasi selama impor. Salinan data Cloudflare disimpan di samping database sebagai `cloudflare-export-*.json`.
+
 ## Akses
 
 Pengelolaan akun aplikasi **dinonaktifkan sementara** melalui `accountsEnabled = false` di `lib/access.ts`. Semua orang yang dapat membuka aplikasi bisa mencatat penerimaan, pengeluaran, penyesuaian, impor, cadangan, dan pengaturan stok. Karena itu lindungi hosting online dengan `SERAGAM_PASSWORD`. Daftar anggota lama, termasuk Rahma dan Afro, tetap tersimpan di database. Mode akun dulu bergantung pada Sign in with ChatGPT dari hosting lama dan belum memiliki pengganti, jadi biarkan flag tetap `false`.
