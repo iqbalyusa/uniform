@@ -15,4 +15,4 @@ await writeFile(join(out,'assets-manifest.json'),JSON.stringify(currentAssets));
 const previous=resolve(root,'hostinger-dist.previous');await rm(previous,{recursive:true,force:true});
 try{await rename(target,previous);}catch(error){if(error.code!=='ENOENT')throw error;}
 try{await rename(out,target);}catch(error){try{await rename(previous,target);}catch{}throw error;}
-console.log('Built Hostinger app. Runtime defaults to the existing Cloudflare inventory; SERAGAM_BACKEND=sqlite selects the separate school database.');
+console.log('Built standalone Hostinger app. Runtime uses only the school-hosted SQLite database.');

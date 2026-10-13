@@ -1,4 +1,4 @@
-> The current school deployment uses Node.js with the existing Cloudflare inventory. Follow [HOSTINGER-NODE.md](HOSTINGER-NODE.md). The PHP package below is an alternative for hosting without a Node.js server.
+> The current school deployment uses Node.js and its own SQLite database, with a one-time copy of the old Cloudflare inventory. Follow [HOSTINGER-NODE.md](HOSTINGER-NODE.md). The PHP package below is a separate legacy alternative that still uses Cloudflare; do not use it for the current deployment.
 
 # School hosting at pribadidepok.sch.id/seragam
 

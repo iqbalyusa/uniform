@@ -10,4 +10,4 @@ npm install --include=dev --no-audit --no-fund
 npm run build:hostinger
 mkdir -p tmp
 touch tmp/restart.txt
-printf '%s\n' "Build ready; Passenger restart requested. Backend: ${SERAGAM_BACKEND:-cloudflare}. No inventory was copied or replaced."
+printf '%s\n' 'Build ready; Passenger restart requested. Backend: school-hosted SQLite. Inventory was not replaced.'
