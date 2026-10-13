@@ -75,3 +75,6 @@ next-env.d.ts
 /hostinger-dist.previous/
 
 /tmp/
+
+# Local school domain configuration; preserved across Git pulls.
+/hosting/node/deployment.json

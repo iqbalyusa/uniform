@@ -4,6 +4,39 @@ This is the current full Hostinger version. The runtime has no Cloudflare connec
 
 For the requested layout, the real checkout can be moved to `~/public_html/seragam-app` using the protected relocation command at the end of this guide. Its root `.htaccess` blocks direct HTTP access to the entire checkout. The `/seragam` URL is served by Passenger/Node.js, separately from the protected `/seragam-app` directory. The SQLite database stays at `~/seragam-data/inventory.sqlite`.
 
+## Using uniform.pribadidepok.sch.id
+
+A subdomain document root must point to the browser build, not the protected repository root. Pointing it at `public_html/seragam-app` returns 403 by design.
+
+First activate the existing Node.js environment and configure the root URL:
+
+```sh
+source ~/nodevenv/repositories/seragam-app/22/bin/activate
+cd ~/public_html/seragam-app
+git pull --ff-only origin main
+node scripts/configure-hostinger-domain.mjs https://uniform.pribadidepok.sch.id /
+SERAGAM_BASE_PATH=/ SERAGAM_ORIGIN=https://uniform.pribadidepok.sch.id bash hosting/node/deploy.sh
+```
+
+The configuration is saved in the Git-ignored `hosting/node/deployment.json`, so future builds retain the domain-root asset and API URLs even in a fresh Terminal session. Environment variables take precedence over this file.
+
+In cPanel **Domains**, set the subdomain's Document root to `public_html/seragam-app/hostinger-dist/public`.
+
+In **Setup Node.js App**, edit the existing application:
+
+- Keep Application root unchanged (currently `seragam-app`, through its compatibility link).
+- Set Application URL to `uniform.pribadidepok.sch.id`, with URI `/` (domain root).
+- Keep startup file `app.cjs`, Node.js 22.13+ and Production mode.
+- Set `SERAGAM_ORIGIN=https://uniform.pribadidepok.sch.id`.
+- Set `SERAGAM_BASE_PATH=/`.
+- Save and restart the app.
+
+This changes the URL without relocating its application root, Node.js environment or database. Do not run the Cloudflare migration again. Use the new domain for transactions after the change.
+
+The build creates an allow rule in its public `.htaccess` to override the repository's deny rule only for browser files. It preserves Passenger directives added to that public file by cPanel during future staged builds. The root repository stays protected, and the Node server refuses hidden-file requests.
+
+Future updates still use `seragam-update` if the Terminal alias was configured, or the pull/deploy commands in this guide. Verify the homepage, `/assets/...` and `/api/state` on the new domain before resuming stock entry.
+
 ## 1. Clone GitHub through cPanel
 
 Open **Git Version Control → Create**. Enable **Clone a Repository** and enter:
