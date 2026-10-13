@@ -30,6 +30,7 @@ export async function fullBackup(member:Member){
 }
 function required(value:unknown,label:string,max=200){if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new ApiError(`${label} wajib diisi (maksimal ${max} karakter).`);return value.trim();}
 export async function movement(member:Member,data:any){
+ if(data.items!==undefined)return purchase(member,data);
  const db=database();validateKey(data.key);const id=required(data.id,'ID permintaan',100);const prior=await db.prepare('SELECT actor_id FROM history WHERE id=?').bind(id).first<{actor_id:string}>();if(prior){if(prior.actor_id!==member.id)throw new ApiError('ID permintaan sudah digunakan.',409);return {replayed:true};}
  const action=data.action;if(!['Masuk','Keluar','Penyesuaian'].includes(action))throw new ApiError('Jenis perubahan tidak valid.');if(action==='Penyesuaian')inventoryEditor(member);if(action==='Masuk'&&data.key.split('|')[1]!=='Baru')throw new ApiError('Penerimaan baru harus memakai sistem ukuran Baru.');
  const current=await db.prepare('SELECT quantity,revision FROM stock WHERE key=?').bind(data.key).first<{quantity:number;revision:number}>();const before=current?.quantity??0,revision=current?.revision??0;if(data.revision!==revision)throw new ApiError('Stok berubah oleh petugas lain. Muat ulang dan periksa jumlah terbaru.',409);
@@ -43,6 +44,39 @@ export async function movement(member:Member,data:any){
   db.prepare('INSERT OR IGNORE INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,note,source) SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? FROM stock WHERE key=? AND last_change=?').bind(id,data.key,action,member.id,member.name,now,date,before,after,after-before,student,cls,note,'app',data.key,id),
   db.prepare('UPDATE settings SET revision=revision+1 WHERE id=1 AND EXISTS (SELECT 1 FROM history WHERE id=?)').bind(id),
  ]);if(!result[2].meta.changes)throw new ApiError('Stok berubah oleh petugas lain. Muat ulang sebelum menyimpan.',409);return {id,before,after};
+}
+async function purchase(member:Member,data:any){
+ const db=database(),id=required(data.id,'ID permintaan',100);
+ const prior=await db.prepare('SELECT actor_id FROM history WHERE id=?').bind(id).first<{actor_id:string}>();
+ if(prior){if(prior.actor_id!==member.id)throw new ApiError('ID permintaan sudah digunakan.',409);return {replayed:true};}
+ if(data.action!=='Keluar'||!Array.isArray(data.items)||!data.items.length||data.items.length>10)throw new ApiError('Pembelian harus berisi 1–10 jenis seragam.');
+ const student=required(data.studentName,'Nama siswa'),cls=required(data.studentClass,'Kelas',50),note=String(data.note??'').slice(0,1000);
+ const date=data.date??localDate();if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||date>localDate())throw new ApiError('Tanggal tidak valid atau berada di masa depan.');
+ const seen=new Set<string>(),lines:{key:string;quantity:number;before:number;revision:number}[]=[];
+ for(const item of data.items){
+  validateKey(item.key);validateQuantity(item.quantity);if(!item.quantity)throw new ApiError('Jumlah harus lebih dari 0.');
+  if(seen.has(item.key))throw new ApiError('Seragam dengan sistem ukuran dan ukuran yang sama cukup dicatat sekali. Gabungkan jumlahnya.');seen.add(item.key);
+  const current=await db.prepare('SELECT quantity,revision FROM stock WHERE key=?').bind(item.key).first<{quantity:number;revision:number}>();
+  const before=current?.quantity??0,revision=current?.revision??0;
+  if(item.revision!==revision)throw new ApiError('Stok berubah oleh petugas lain. Muat ulang dan periksa jumlah terbaru.',409);
+  if(item.quantity>before)throw new ApiError(`Stok tidak cukup untuk seragam ${lines.length+1}. Tersedia ${before} pcs.`,409);
+  lines.push({key:item.key,quantity:item.quantity,before,revision});
+ }
+ const now=new Date().toISOString(),statements=[];
+ lines.forEach((line,index)=>{
+  const lineId=index===0?id:`${id}:${index}`;
+  // A revision conflict violates the stock guard, rolling back the entire D1 batch.
+  statements.push(db.prepare('UPDATE stock SET quantity=CASE WHEN revision=? THEN quantity-? ELSE -1 END,revision=revision+1,last_change=? WHERE key=?').bind(line.revision,line.quantity,lineId,line.key));
+  statements.push(db.prepare('INSERT INTO history (id,key,action,actor_id,actor,occurred_at,date,before_qty,after_qty,delta,student_name,student_class,note,source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(lineId,line.key,'Keluar',member.id,member.name,now,date,line.before,line.before-line.quantity,-line.quantity,student,cls,note,'app'));
+ });
+ statements.push(db.prepare('UPDATE settings SET revision=revision+1 WHERE id=1'));
+ try{await db.batch(statements);}catch(error){
+  const prior=await db.prepare('SELECT actor_id FROM history WHERE id=?').bind(id).first<{actor_id:string}>();
+  if(prior?.actor_id===member.id)return {replayed:true};
+  if(String(error).includes('invalid stock quantity'))throw new ApiError('Stok berubah oleh petugas lain. Muat ulang sebelum menyimpan.',409);
+  throw error;
+ }
+ return {id,items:lines.length,quantity:lines.reduce((total,line)=>total+line.quantity,0)};
 }
 export async function changeMember(member:Member,data:any){
  if(!accountsEnabled)throw new ApiError('Pengelolaan akun dinonaktifkan sementara.',404);

@@ -32,3 +32,53 @@ test('history returns records with blank date filters and respects a supplied ra
  assert.ok(all.length>0);assert.ok(all.some(row=>row.date==='2026-01-01'));
  const future=await (await route.GET(new Request('https://example.com/api/history?from=2099-01-01&to=2099-12-31'))).json();assert.equal(future.length,0);
 });
+
+test('one student purchase updates multiple uniforms once and records each item',async()=>{
+ const state=await service.snapshot(admin),keys=['0|Baru|1','1|Baru|2'];
+ const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa pembelian',studentClass:'7A',date:'2026-01-01',note:'Dua seragam',items:keys.map(key=>({key,quantity:1,revision:state.stock[key].revision}))};
+ await service.movement(admin,request);await service.movement(admin,request);
+ const after=await service.snapshot(admin);
+ for(const key of keys)assert.equal(after.stock[key].quantity,state.stock[key].quantity-1);
+ const history=after.history.filter(h=>h.id===request.id||h.id.startsWith(request.id+':'));
+ assert.equal(history.length,2);assert.ok(history.every(h=>h.student_name===request.studentName&&h.student_class==='7A'&&h.delta===-1));
+ assert.equal(after.revision,state.revision+1);
+});
+
+test('an unavailable later purchase item leaves all quantities and history unchanged',async()=>{
+ const state=await service.snapshot(admin),keys=['2|Baru|1','3|Baru|1'];
+ const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',items:keys.map((key,i)=>({key,quantity:i?state.stock[key].quantity+1:1,revision:state.stock[key].revision}))};
+ await assert.rejects(service.movement(admin,request),/tidak cukup/);
+ const after=await service.snapshot(admin);assert.deepEqual(after.stock,state.stock);assert.deepEqual(after.history,state.history);assert.equal(after.revision,state.revision);
+});
+
+test('purchase rejects missing student details, duplicate sizes and invalid quantities',async()=>{
+ const state=await service.snapshot(admin),key='4|Baru|1',line={key,quantity:1,revision:state.stock[key].revision};
+ const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',items:[line]};
+ await assert.rejects(service.movement(admin,{...request,studentName:''}),/Nama siswa/);
+ await assert.rejects(service.movement(admin,{...request,studentClass:''}),/Kelas/);
+ await assert.rejects(service.movement(admin,{...request,items:[line,line]}),/Gabungkan/);
+ await assert.rejects(service.movement(admin,{...request,items:[{...line,quantity:0}]}),/lebih dari 0/);
+ await assert.rejects(service.movement(admin,{...request,items:[{...line,quantity:1.5}]}),/bilangan/);
+ await assert.rejects(service.movement(admin,{...request,items:Array(11).fill(line)}),/1–10/);
+});
+
+test('a concurrent stock revision on the second item rolls back the first item and its audit',async()=>{
+ const state=await service.snapshot(admin),keys=['5|Baru|1','6|Baru|1'];
+ const request={id:crypto.randomUUID(),action:'Keluar',studentName:'Siswa',studentClass:'7A',items:keys.map(key=>({key,quantity:1,revision:state.stock[key].revision}))};
+ const db=globalThis.testEnv.DB,originalBatch=db.batch;
+ db.batch=async statements=>{sqlite.prepare('UPDATE stock SET revision=revision+1 WHERE key=?').run(keys[1]);return originalBatch(statements);};
+ try{await assert.rejects(service.movement(admin,request),/Stok berubah/);}finally{db.batch=originalBatch;}
+ const after=await service.snapshot(admin);
+ for(const key of keys)assert.equal(after.stock[key].quantity,state.stock[key].quantity);
+ assert.equal(after.stock[keys[0]].revision,state.stock[keys[0]].revision);
+ assert.equal(after.revision,state.revision);assert.ok(!after.history.some(h=>h.id===request.id||h.id.startsWith(request.id+':')));
+});
+
+test('concurrent multi-item purchases cannot partially save or overdraw stock',async()=>{
+ const state=await service.snapshot(admin),keys=['7|Baru|1','8|Baru|1'];
+ const request={action:'Keluar',studentName:'Siswa',studentClass:'7A',items:keys.map(key=>({key,quantity:2,revision:state.stock[key].revision}))};
+ const results=await Promise.allSettled([service.movement(admin,{...request,id:crypto.randomUUID()}),service.movement(admin,{...request,id:crypto.randomUUID()})]);
+ assert.equal(results.filter(r=>r.status==='fulfilled').length,1);
+ const after=await service.snapshot(admin);for(const key of keys)assert.equal(after.stock[key].quantity,state.stock[key].quantity-2);
+ assert.equal(after.history.length,state.history.length+2);assert.equal(after.revision,state.revision+1);
+});
