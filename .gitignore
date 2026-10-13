@@ -68,3 +68,10 @@ next-env.d.ts
 /backups/
 
 /school-dist/
+
+/hostinger-dist/
+
+/hostinger-dist.next/
+/hostinger-dist.previous/
+
+/tmp/

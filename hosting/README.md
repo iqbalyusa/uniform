@@ -1,3 +1,5 @@
+> For the requested full move of app and database to Hostinger, follow [HOSTINGER-NODE.md](HOSTINGER-NODE.md). The PHP package below keeps Cloudflare and is not the full migration.
+
 # School hosting at pribadidepok.sch.id/seragam
 
 This deployment serves the app's HTML, JavaScript, fonts and images from the school hosting. A PHP gateway forwards inventory operations to the existing Cloudflare Worker and D1 database. It does not copy or reset inventory. Cloudflare remains necessary for stock, history and backups.

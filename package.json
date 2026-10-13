@@ -13,7 +13,10 @@
     "start": "node scripts/preview-app.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate",
-    "build:school": "node scripts/build-school.mjs"
+    "build:school": "node scripts/build-school.mjs",
+    "build:hostinger": "node scripts/build-hostinger.mjs",
+    "start:hostinger": "node app.cjs",
+    "import:hostinger": "node scripts/import-hostinger.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
