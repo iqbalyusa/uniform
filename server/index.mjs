@@ -47,7 +47,8 @@ export async function startServer({port=Number(process.env.PORT||3000),host=proc
    const pathname=decodeURIComponent(url.pathname),file=resolve(publicRoot,'.'+(pathname==='/'?'/index.html':pathname));
    if(pathname.split('/').some(part=>part.startsWith('.'))||!file.startsWith(publicRoot+sep)||!statSync(file,{throwIfNoEntry:false})?.isFile()){res.writeHead(404,security);res.end('Tidak ditemukan');return;}
    let asset=cache.get(file);
-   if(!asset){const body=readFileSync(file),extension=file.split('.').pop();asset={body,type:types[extension]||'application/octet-stream',gzip:['html','css','js','svg'].includes(extension)?gzipSync(body):null};cache.set(file,asset);}
+   // Only hashed /assets/ files are cached; index.html is re-read so a rebuild shows up without a restart.
+   if(!asset){const body=readFileSync(file),extension=file.split('.').pop();asset={body,type:types[extension]||'application/octet-stream',gzip:['html','css','js','svg'].includes(extension)?gzipSync(body):null};if(pathname.startsWith('/assets/'))cache.set(file,asset);}
    const compressed=asset.gzip&&/\bgzip\b/.test(req.headers['accept-encoding']||''),body=compressed?asset.gzip:asset.body;
    res.writeHead(200,{...security,'Content-Type':asset.type,'Cache-Control':pathname.startsWith('/assets/')?'public, max-age=31536000, immutable':'no-store',Vary:'Accept-Encoding',...(compressed?{'Content-Encoding':'gzip'}:{}),'Content-Length':body.length});
    res.end(req.method==='HEAD'?undefined:body);

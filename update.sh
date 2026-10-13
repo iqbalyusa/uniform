@@ -13,8 +13,11 @@ main(){
  if ! command -v npm >/dev/null 2>&1; then
   activate="$(ls -d "$HOME/nodevenv/${app#"$HOME"/}"/*/bin/activate 2>/dev/null | sort -V | tail -n 1 || true)"
   if [ -z "$activate" ]; then echo "Node.js environment not found. Create the app in Setup Node.js App first." >&2; exit 1; fi
+  # cPanel's activate script reads variables that may be unset, so relax `set -u` while loading it.
+  set +u
   # shellcheck disable=SC1090
   source "$activate"
+  set -u
  fi
 
  echo "1/4 Downloading new code..."
