@@ -1,0 +1,4 @@
+# The repository is private even when located inside public_html.
+# The public /seragam URL is served separately by the Node.js Passenger app.
+Options -Indexes
+Require all denied

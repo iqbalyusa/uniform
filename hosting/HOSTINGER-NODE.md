@@ -2,6 +2,8 @@
 
 This is the current full Hostinger version. The runtime has no Cloudflare connection. It runs a Node.js server and a persistent SQLite database on the school hosting. It does not forward inventory requests to Cloudflare. Do not use the earlier PHP gateway package for this deployment.
 
+For the requested layout, the real checkout can be moved to `~/public_html/seragam-app` using the protected relocation command at the end of this guide. Its root `.htaccess` blocks direct HTTP access to the entire checkout. The `/seragam` URL is served by Passenger/Node.js, separately from the protected `/seragam-app` directory. The SQLite database stays at `~/seragam-data/inventory.sqlite`.
+
 ## 1. Clone GitHub through cPanel
 
 Open **Git Version Control → Create**. Enable **Clone a Repository** and enter:
@@ -10,7 +12,7 @@ Open **Git Version Control → Create**. Enable **Clone a Repository** and enter
 - Repository Path: `repositories/seragam-app` in the account home directory, outside `public_html`.
 - Repository Name: `seragam`.
 
-Create the repository. Keep the Git checkout outside WordPress's public directory because it contains server code and configuration.
+Create the repository here first. The protected relocation command below moves an existing built app into `public_html` and preserves its registered paths.
 
 ## 2. Create the Node.js application
 
@@ -98,4 +100,26 @@ The current shared-editing behavior and Staff selector are preserved. Existing a
 
 ## Moving an existing cPanel app
 
-The Node.js Selector relocates the app environment when its application root changes. Do not create a second clone in the intended destination before asking cPanel to relocate an existing application. Keep the source directory, app registration, activation command and Passenger paths consistent. A successful build alone does not confirm that cPanel registered the new location.
+To place the actual checkout inside `public_html`, pause entry while running:
+
+```sh
+source ~/nodevenv/repositories/seragam-app/22/bin/activate
+cd ~/repositories/seragam-app
+git pull --ff-only origin main && node scripts/move-hostinger-public-html.mjs
+```
+
+The script checks the existing paths and the deny-all `.htaccess`, creates private source and SQLite backups under `~/seragam-relocation-backups/<timestamp>`, and moves the app to `~/public_html/seragam-app`. SQLite is backed up with `VACUUM INTO` so changes in its active WAL file are included. The database itself is not moved. An occupied destination stops the command without overwriting files. A failure after the move restores the original layout.
+
+Both `~/seragam-app` and the old checkout path become links to the new directory. The existing Node.js environment, cPanel Application root, URI, startup file and activation command stay valid. Do not change Application root or move `nodevenv` as part of this operation. The script requests a Passenger restart; click **Restart** in cPanel if needed.
+
+Afterward, `https://pribadidepok.sch.id/seragam/` must display the app, while `https://pribadidepok.sch.id/seragam-app/` and paths such as `/seragam-app/.git/HEAD` must be blocked (403/404). The deny-all rule protects all source files, built server files and configuration; Node.js reads its files locally and only serves its public browser assets.
+
+Future updates use:
+
+```sh
+source ~/nodevenv/repositories/seragam-app/22/bin/activate
+cd ~/public_html/seragam-app
+git pull --ff-only origin main && bash hosting/node/deploy.sh
+```
+
+Keep the compatibility links in place. `repositories/seragam-app` is then a link, not a second copy. Keep the root `.htaccess`, database, migration JSON and private relocation backups in their designated locations. Do not rerun the Cloudflare import when moving or updating the app.
