@@ -15,7 +15,7 @@ const service=await import(`data:text/javascript;base64,${Buffer.from(result.out
 globalThis.testUser={userId:'rahma-id',email:'rahma@pribadidepok.sch.id',displayName:'Rahma'};
 const admin=await service.actor();
 const key='13|Baru|9';
-const move=(overrides={})=>({id:crypto.randomUUID(),key,action:'Masuk',staffName:'Iin Rosita',quantity:10,revision:0,date:'2026-01-01',...overrides});
+const move=(overrides={})=>({id:crypto.randomUUID(),key,action:'Masuk',staffName:'Anna Ratna',quantity:10,revision:0,date:'2026-01-01',...overrides});
 test('authenticated listed accounts bind stable identity; others are denied',async()=>{assert.equal(admin.role,'admin');globalThis.testUser={userId:'unknown',email:'unknown@example.com'};await assert.rejects(service.actor(),/belum diberi akses/);globalThis.testUser=null;await assert.rejects(service.actor(),/Silakan masuk/);globalThis.testUser={userId:'rahma-id',email:'rahma@pribadidepok.sch.id'};});
 test('receipts, required recipients, and negative balance protection',async()=>{await service.movement(admin,move());assert.equal(sqlite.prepare('SELECT quantity FROM stock WHERE key=?').get(key).quantity,10);await assert.rejects(service.movement(admin,move({action:'Masuk',key:'13|Lama|9-10'})),/ukuran Baru/);await assert.rejects(service.movement(admin,move({action:'Keluar',quantity:1,revision:1})),/Nama siswa/);await assert.rejects(service.movement(admin,move({action:'Keluar',quantity:11,revision:1,studentName:'Test siswa',studentClass:'7A'})),/tidak cukup/);assert.throws(()=>sqlite.prepare('UPDATE stock SET quantity=-1 WHERE key=?').run(key),/invalid stock quantity/);});
 test('concurrent issues cannot overdraw and write exactly one audit entry',async()=>{const records=await Promise.allSettled([service.movement(admin,move({action:'Keluar',quantity:7,revision:1,studentName:'Siswa A',studentClass:'7A'})),service.movement(admin,move({action:'Keluar',quantity:7,revision:1,studentName:'Siswa B',studentClass:'7B'}))]);assert.equal(records.filter(r=>r.status==='fulfilled').length,1);assert.equal(sqlite.prepare('SELECT quantity FROM stock WHERE key=?').get(key).quantity,3);assert.equal(sqlite.prepare("SELECT count(*) AS n FROM history WHERE action='Keluar'").get().n,1);});
@@ -84,7 +84,7 @@ test('concurrent multi-item purchases cannot partially save or overdraw stock',a
 });
 
 test('receipts record the selected staff separately from the authenticated actor',async()=>{
- for(const staffName of ['Iin Rosita','Afro Mutmainah','Rahmawati']){
+ for(const staffName of ['Anna Ratna','Afro Mutmainah','Rahmawati']){
   const state=await service.snapshot(admin),key='10|Baru|2';
   const request=move({key,quantity:1,revision:state.stock[key].revision,staffName});await service.movement(admin,request);
   const row=sqlite.prepare('SELECT * FROM history WHERE id=?').get(request.id);

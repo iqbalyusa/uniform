@@ -270,4 +270,4 @@ Preserve the removed workspace/database/mode labels and explanation card. Stock 
 
 ## Staff on stock movements
 
-Stok masuk and Stok keluar end with a required Staff selector after Catatan and before Save. Options are Iin Rosita, Afro Mutmainah, and Rahmawati, with no name selected by default. One selection applies to every uniform in a student purchase. The selected staff name is stored separately from the request actor, appears in activity lists, can be searched, and is included in history exports and backups. Legacy records keep their original attribution.
+Stok masuk and Stok keluar end with a required Staff selector after Catatan and before Save. Options are Anna Ratna, Afro Mutmainah, and Rahmawati, with no name selected by default. One selection applies to every uniform in a student purchase. The selected staff name is stored separately from the request actor, appears in activity lists, can be searched, and is included in history exports and backups. Legacy records keep their original attribution.

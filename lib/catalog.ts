@@ -1,4 +1,4 @@
-export const staffNames=['Iin Rosita','Afro Mutmainah','Rahmawati'] as const;
+export const staffNames=['Anna Ratna','Afro Mutmainah','Rahmawati'] as const;
 export const uniforms = [
  ['Kemeja Nasional SD Putra','Nasional','SD'],['Kemeja Nasional SD Putri','Nasional','SD'],['Celana Nasional SD','Nasional','SD'],['Rok Nasional SD','Nasional','SD'],
  ['Kemeja Nasional SMP Putra','Nasional','SMP'],['Kemeja Nasional SMP Putri','Nasional','SMP'],['Celana Nasional SMP','Nasional','SMP'],['Rok Nasional SMP','Nasional','SMP'],
