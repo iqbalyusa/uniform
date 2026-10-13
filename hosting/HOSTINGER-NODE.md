@@ -48,9 +48,11 @@ cd ~/public_html/seragam-app
 git pull --ff-only origin main && bash hosting/node/repair-domain.sh https://uniform.pribadidepok.sch.id
 ```
 
-This backs up the original home link under `~/seragam-registration-backups`, replaces that link with a launcher containing `app.cjs` and a minimal `package.json`, and uses the existing Node.js environment. Its `tmp` path points to the real app's restart directory, so future `seragam-update` runs still restart Passenger. The domain build is refreshed for root `/`. The database is not touched and the actual app folder is not moved again.
+This backs up the original home link under `~/seragam-registration-backups`, replaces that link with a launcher containing `app.cjs` and a minimal `package.json`, and uses the existing Node.js environment. Its `tmp` is a real directory inside the launcher. Future `seragam-update` runs touch restart markers in both the actual app and the registered launcher. The domain build is refreshed for root `/`. The database is not touched and the actual app folder is not moved again.
 
 Reopen the app from **Web Applications** to clear the old editor state. Keep Application root `seragam-app`, startup file `app.cjs`, select the uniform subdomain with root URI, and keep the new `SERAGAM_ORIGIN` and `SERAGAM_BASE_PATH=/` values. Save and restart. This repair does not edit Node Selector's internal configuration files or destroy the existing registration.
+
+If the earlier launcher reports `Directory 'tmp' is outside application root`, update the code and rerun `node scripts/repair-hostinger-registration.mjs`. It replaces only the verified old `tmp` symlink with a real directory inside the launcher, preserving the old target directory and its contents. Then save and restart in cPanel. The deployment script now requests restarts at both application paths, so `seragam-update` keeps working.
 
 This changes the URL without relocating its application root, Node.js environment or database. Do not run the Cloudflare migration again. Use the new domain for transactions after the change.
 
@@ -164,7 +166,7 @@ git pull --ff-only origin main && node scripts/move-hostinger-public-html.mjs
 
 The script checks the existing paths and the deny-all `.htaccess`, creates private source and SQLite backups under `~/seragam-relocation-backups/<timestamp>`, and moves the app to `~/public_html/seragam-app`. SQLite is backed up with `VACUUM INTO` so changes in its active WAL file are included. The database itself is not moved. An occupied destination stops the command without overwriting files. A failure after the move restores the original layout.
 
-The old checkout path becomes a link to the new directory. `~/seragam-app` becomes a small real launcher directory, so Node Selector's registered root stays stable when editing its URL. The launcher loads the actual app inside `public_html`; its `tmp` link shares the real app's restart marker. The existing Node.js environment, cPanel Application root, URI, startup file and activation command stay valid. Do not change Application root or move `nodevenv` as part of this operation. The script requests a Passenger restart; click **Restart** in cPanel if needed.
+The old checkout path becomes a link to the new directory. `~/seragam-app` becomes a small real launcher directory, so Node Selector's registered root stays stable when editing its URL. The launcher loads the actual app inside `public_html`; its `tmp` is a real directory inside the registered root, and deployment updates both restart markers. The existing Node.js environment, cPanel Application root, URI, startup file and activation command stay valid. Do not change Application root or move `nodevenv` as part of this operation. The script requests a Passenger restart; click **Restart** in cPanel if needed.
 
 Afterward, `https://pribadidepok.sch.id/seragam/` must display the app, while `https://pribadidepok.sch.id/seragam-app/` and paths such as `/seragam-app/.git/HEAD` must be blocked (403/404). The deny-all rule protects all source files, built server files and configuration; Node.js reads its files locally and only serves its public browser assets.
 

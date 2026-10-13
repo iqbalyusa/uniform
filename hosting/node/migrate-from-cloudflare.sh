@@ -9,6 +9,5 @@ trap cleanup_lock EXIT
 npm install --include=dev --no-audit --no-fund
 npm run build:hostinger
 node scripts/migrate-cloudflare-to-hostinger.mjs
-mkdir -p tmp
-touch tmp/restart.txt
+node scripts/request-hostinger-restart.mjs
 printf '%s\n' 'Import succeeded; Passenger restart requested. Backend: school-hosted SQLite only.'

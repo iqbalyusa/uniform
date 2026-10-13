@@ -1,9 +1,22 @@
 import {randomUUID} from 'node:crypto';
-import {existsSync,lstatSync,mkdirSync,readFileSync,realpathSync,renameSync,rmSync,symlinkSync,unlinkSync,writeFileSync} from 'node:fs';
+import {existsSync,lstatSync,mkdirSync,readFileSync,readlinkSync,realpathSync,renameSync,rmSync,symlinkSync,unlinkSync,writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {requestRestart} from './restart.mjs';
 
 const present=path=>{try{lstatSync(path);return true;}catch(error){if(error.code==='ENOENT')return false;throw error;}};
+
+function repairTmp(launcher,appRoot){
+ const tmp=join(launcher,'tmp');
+ if(present(tmp)&&lstatSync(tmp).isSymbolicLink()){
+  const original=readlinkSync(tmp);
+  if(realpathSync(tmp)!==realpathSync(join(appRoot,'tmp')))throw Error('Launcher tmp points to an unexpected directory. Nothing was replaced.');
+  unlinkSync(tmp);
+  try{mkdirSync(tmp);}catch(error){symlinkSync(original,tmp,'dir');throw error;}
+  return true;
+ }
+ mkdirSync(tmp,{recursive:true});return false;
+}
 
 export function repairLauncher({accountHome,appRoot}){
  accountHome=realpathSync(accountHome);appRoot=realpathSync(appRoot);
@@ -24,7 +37,9 @@ export function repairLauncher({accountHome,appRoot}){
  if(present(environmentAlias)&&(!existsSync(environmentAlias)||!lstatSync(realpathSync(environmentAlias)).isDirectory()))throw Error('The registered Node.js environment path is invalid. Nothing was changed.');
  if(alreadyRepaired){
   if(!present(environmentAlias))symlinkSync(environmentRoot,environmentAlias,'dir');
-  return {alreadyRepaired,launcher,appRoot,environmentRoot};
+  const tmpRepaired=repairTmp(launcher,appRoot);
+  requestRestart({appRoot,accountHome});
+  return {alreadyRepaired,launcher,appRoot,environmentRoot,tmpRepaired};
  }
  const backupDir=join(accountHome,'seragam-registration-backups',`${Date.now()}-${randomUUID().slice(0,8)}`);
  mkdirSync(backupDir,{recursive:true,mode:0o700});
@@ -33,7 +48,7 @@ export function repairLauncher({accountHome,appRoot}){
  writeFileSync(join(stage,'app.cjs'),startup,{mode:0o644});
  writeFileSync(join(stage,'package.json'),JSON.stringify({name:'seragam-cpanel-launcher',version:'1.0.0',private:true,scripts:{start:'node app.cjs'}},null,2)+'\n',{mode:0o644});
  writeFileSync(join(stage,'.seragam-launcher.json'),JSON.stringify({schemaVersion:1,appRoot,environmentRoot},null,2)+'\n',{mode:0o600});
- mkdirSync(join(appRoot,'tmp'),{recursive:true});symlinkSync(join(appRoot,'tmp'),join(stage,'tmp'),'dir');
+ mkdirSync(join(appRoot,'tmp'),{recursive:true});mkdirSync(join(stage,'tmp'));
  const modules=join(appRoot,'node_modules');if(existsSync(modules))symlinkSync(realpathSync(modules),join(stage,'node_modules'),'dir');
  let aliasCreated=false,originalMoved=false,installed=false;
  const oldLink=join(backupDir,'original-seragam-app-link');
@@ -41,7 +56,7 @@ export function repairLauncher({accountHome,appRoot}){
   if(!present(environmentAlias)){symlinkSync(environmentRoot,environmentAlias,'dir');aliasCreated=true;}
   if(present(launcher)){renameSync(launcher,oldLink);originalMoved=true;}
   renameSync(stage,launcher);installed=true;
-  writeFileSync(join(launcher,'tmp/restart.txt'),'');
+  requestRestart({appRoot,accountHome});
   return {launcher,appRoot,environmentRoot,backupDir};
  }catch(error){
   try{

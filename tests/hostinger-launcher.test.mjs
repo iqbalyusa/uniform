@@ -6,6 +6,7 @@ import {mkdtempSync,mkdirSync,writeFileSync,readFileSync,realpathSync,lstatSync,
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {repairLauncher} from '../hosting/node/launcher.mjs';
+import {requestRestart} from '../hosting/node/restart.mjs';
 
 function fixture(){
  const accountHome=mkdtempSync(join(tmpdir(),'seragam-launcher-')),appRoot=join(accountHome,'public_html/seragam-app'),environmentRoot=join(accountHome,'nodevenv/repositories/seragam-app'),databasePath=join(accountHome,'seragam-data/inventory.sqlite');
@@ -30,10 +31,22 @@ test('registered app root becomes a real launcher directory and starts the publi
  }finally{f.close();}
 });
 
-test('deploy restart marker is visible from the cPanel launcher root',()=>{
+test('launcher tmp stays inside its root and deploy requests restart for both application paths',()=>{
  const f=fixture();try{
-  const result=repairLauncher(f);writeFileSync(join(f.appRoot,'tmp/restart.txt'),'next build');
-  assert.equal(readFileSync(join(result.launcher,'tmp/restart.txt'),'utf8'),'next build');
+  const result=repairLauncher(f);
+  const tmp=join(result.launcher,'tmp');assert.ok(lstatSync(tmp).isDirectory());assert.equal(realpathSync(tmp),tmp);
+  writeFileSync(join(f.appRoot,'tmp/restart.txt'),'old build');writeFileSync(join(tmp,'restart.txt'),'old build');
+  assert.equal(requestRestart(f).length,2);
+  assert.equal(readFileSync(join(f.appRoot,'tmp/restart.txt'),'utf8'),'');assert.equal(readFileSync(join(tmp,'restart.txt'),'utf8'),'');
+ }finally{f.close();}
+});
+
+test('repair upgrades the previous tmp symlink without deleting its target contents',()=>{
+ const f=fixture();try{
+  const result=repairLauncher(f),tmp=join(result.launcher,'tmp');
+  rmSync(tmp,{recursive:true});writeFileSync(join(f.appRoot,'tmp/keep.txt'),'original target data');symlinkSync(join(f.appRoot,'tmp'),tmp,'dir');
+  const upgraded=repairLauncher(f);assert.equal(upgraded.tmpRepaired,true);assert.ok(lstatSync(tmp).isDirectory());
+  assert.equal(realpathSync(tmp),tmp);assert.equal(readFileSync(join(f.appRoot,'tmp/keep.txt'),'utf8'),'original target data');
  }finally{f.close();}
 });
 

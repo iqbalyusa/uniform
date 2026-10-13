@@ -8,6 +8,5 @@ cleanup_lock(){ cp "$seragam_lock_copy" package-lock.json; rm -f "$seragam_lock_
 trap cleanup_lock EXIT
 npm install --include=dev --no-audit --no-fund
 npm run build:hostinger
-mkdir -p tmp
-touch tmp/restart.txt
+node scripts/request-hostinger-restart.mjs
 printf '%s\n' 'Build ready; Passenger restart requested. Backend: school-hosted SQLite. Inventory was not replaced.'

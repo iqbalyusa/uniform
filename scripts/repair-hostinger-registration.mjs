@@ -4,6 +4,7 @@ import {repairLauncher} from '../hosting/node/launcher.mjs';
 
 const result=repairLauncher({accountHome:homedir(),appRoot:projectRoot});
 console.log(result.alreadyRepaired?'The stable cPanel launcher is already installed.':'Stable cPanel launcher installed at: '+result.launcher);
+if(result.tmpRepaired)console.log('Replaced the old tmp link with a real directory inside the registered application root.');
 console.log('Actual app and Git repository stay at: '+result.appRoot);
 console.log('Existing Node.js environment: '+result.environmentRoot);
 if(result.backupDir)console.log('Original compatibility link backed up at: '+result.backupDir);
