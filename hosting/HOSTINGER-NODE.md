@@ -1,97 +1,35 @@
-# School-hosted app and database, with Git updates
+# School Node.js app with the existing Cloudflare inventory
 
-This is the full Hostinger version. It runs a Node.js server and a persistent SQLite database on the school hosting. It does not forward inventory requests to Cloudflare. Do not use the earlier PHP gateway package for this deployment.
+The school hosting serves the website at `https://pribadidepok.sch.id/seragam/`. Its Node.js server forwards stock, history, settings and backup requests to `https://uniform.pribadisch.workers.dev`. That Worker continues to use the existing D1 database. The browser calls the school domain; it does not need cross-domain CORS access or a Cloudflare API token.
 
-## 1. Clone GitHub through cPanel
+Cloudflare is now the default backend. No stock is imported, copied or merged during deploy. A Worker outage returns an error and never switches to the separate SQLite database. Movement request IDs and stock revisions pass through unchanged, so existing multi-item purchases, Staff records, duplicate-request protection and concurrent stock checks still run in the Worker.
 
-Open **Git Version Control → Create**. Enable **Clone a Repository** and enter:
+## Update the existing school deployment
 
-- Clone URL: `https://github.com/iqbalyusa/uniform.git`
-- Repository Path: `repositories/seragam-app` in the account home directory, outside `public_html`.
-- Repository Name: `seragam`.
-
-Create the repository. Keep the Git checkout outside WordPress's public directory because it contains server code and configuration.
-
-## 2. Create the Node.js application
-
-Open **Setup Node.js App → Create Application**:
-
-- Node.js version: **22.13 or newer**. The built-in SQLite database requires this version.
-- Application mode: Production.
-- Application root: `repositories/seragam-app` (the Git checkout).
-- Application URL: select `pribadidepok.sch.id`, with URI `/seragam`.
-- Application startup file: `app.cjs`.
-- Environment variable `SERAGAM_ORIGIN`: `https://pribadidepok.sch.id` (no `/seragam` suffix).
-
-Create/save the application. Copy the environment activation command displayed by cPanel. It contains the account-specific virtual environment path.
-
-If Node.js 22.13+ is not available, stop here and ask the hosting provider to enable it. Selecting an older version will not run this package.
-
-## 3. First build
-
-Open **Terminal**, paste the environment activation command from Setup Node.js App, then enter the repository directory and run:
+Use the Node.js activation command for the environment currently present on the server. For this account it is:
 
 ```sh
-bash hosting/node/deploy.sh
+source /home/pribadisch/nodevenv/repositories/seragam-app/22/bin/activate
+cd /home/pribadisch/repositories/seragam-app
+git pull --ff-only origin main && bash hosting/node/deploy.sh
 ```
 
-The app uses the existing React UI and compiles its API for Node.js. cPanel serves it at `/seragam`. The default database location is `~/seragam-data/inventory.sqlite`, independent of the checkout location, outside both Git and `public_html`.
+The deploy script builds the website and touches `tmp/restart.txt` to request a Passenger restart. If necessary, click **Restart** in Setup Node.js App. Keep startup file `app.cjs`, Production mode and Node.js 22.13 or newer. Preserve the existing application registration; changing the backend does not require moving directories or recreating the app.
 
-## 4. Import the operational database
+`SERAGAM_ORIGIN` must be `https://pribadidepok.sch.id`. `SERAGAM_BACKEND` may be omitted or explicitly set to `cloudflare`. If the app has an existing `SERAGAM_BACKEND=sqlite` setting, change it to `cloudflare` and restart. The existing `SERAGAM_DATABASE_PATH` setting has no effect in Cloudflare mode.
 
-Pause entry in the old Cloudflare app during the final transfer. Use a fresh export so transactions made after an earlier export are not missed.
+Open the school app and compare stock and history with the original Worker app. Both addresses use the same database after this deployment. Keep `~/seragam-data` intact; that separate database is not accessed in Cloudflare mode.
 
-Upload the supplied private migration JSON into the account home directory, outside `public_html`, using File Manager. From the repository directory in the activated Node.js environment, run:
+## Future updates
 
-```sh
-npm run import:hostinger -- ~/seragam-hostinger-migration.json
-```
+Push code to GitHub, then run the same pull/deploy commands above on the school hosting. A GitHub push does not automatically pull into cPanel. Cloudflare's existing GitHub integration continues to deploy the Worker.
 
-This imports stock, revisions, complete activity history, Staff names, settings and the saved backups included in the archive. It refuses to overwrite an already populated database. The private migration file and the SQLite database must never be committed to Git or put inside `public_html`.
+## First installation
 
-Click **Restart** in Setup Node.js App, then open `https://pribadidepok.sch.id/seragam/`. Compare stock totals, history and backups before resuming entry on the school app. Keep the old Cloudflare database until the school deployment is verified; after cutover, record transactions only in the school app.
+Clone the repository into `~/repositories/seragam-app`. Create the Node.js app with application root `repositories/seragam-app`, URI `seragam`, startup `app.cjs`, Node.js 22.13+, Production mode, and `SERAGAM_ORIGIN=https://pribadidepok.sch.id`. Activate the environment using the command supplied by cPanel, enter the checkout and run `bash hosting/node/deploy.sh`.
 
-## 5. Future Git updates
+For an already registered app, do not attempt a folder relocation as part of this database change. The application root and activation environment must resolve to the existing files before Passenger can restart successfully.
 
-Push code changes to GitHub normally:
+## Optional local database
 
-```sh
-git push origin main
-```
-
-On cPanel, either use **Git Version Control → Manage → Pull or Deploy → Update from Remote**, or activate the Node.js environment in Terminal, enter the repository directory, and run:
-
-```sh
-git pull --ff-only origin main
-bash hosting/node/deploy.sh
-```
-
-The script installs build dependencies, builds into a staging directory, switches the build, and touches `tmp/restart.txt` to restart Passenger. It preserves the database. Previous hashed assets are retained for clients that loaded the page before the update.
-
-Git pull updates source code; it does not build or restart Node by itself. This setup does not automatically pull on each GitHub push. Automatic push-to-server deployments need a separate SSH deployment connection.
-
-## Backups and configuration
-
-Use **Impor & cadangan** to download backups before updates and periodically. A Git repository backs up code, not inventory.
-
-Optional `SERAGAM_DATABASE_PATH` selects a different absolute SQLite path. Set the same value during import and at runtime. Keep it outside the checkout and public website directory.
-
-The current shared-editing behavior and Staff selector are preserved. Existing account enforcement is not enabled by this deployment.
-
-## Placing the checkout in repositories
-
-Keep the existing app available while creating the new checkout:
-
-```sh
-mkdir -p ~/repositories
-git clone https://github.com/iqbalyusa/uniform.git ~/repositories/seragam-app
-```
-
-In Setup Node.js App, set the application root to `repositories/seragam-app`, retaining the same URL, startup file, and origin. Use the activation command generated for that application root, then run:
-
-```sh
-cd ~/repositories/seragam-app
-bash hosting/node/deploy.sh
-```
-
-If cPanel does not allow editing the existing application root, the application registration must be reconfigured for the new root. Keep the original code folder and database until the new registration is verified. Do not move `~/seragam-data` into the checkout. The database defaults to the account's home directory, so changing the checkout location does not create another database.
+Explicitly set `SERAGAM_BACKEND=sqlite` to use the separate school-hosted database. The [SQLite migration guide](HOSTINGER-SQLITE.md) describes that alternative. The databases are independent; switching back does not synchronize quantities or transactions. Do not import the school database over the existing Cloudflare inventory.

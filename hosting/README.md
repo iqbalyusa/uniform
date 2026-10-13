@@ -1,4 +1,4 @@
-> For the requested full move of app and database to Hostinger, follow [HOSTINGER-NODE.md](HOSTINGER-NODE.md). The PHP package below keeps Cloudflare and is not the full migration.
+> The current school deployment uses Node.js with the existing Cloudflare inventory. Follow [HOSTINGER-NODE.md](HOSTINGER-NODE.md). The PHP package below is an alternative for hosting without a Node.js server.
 
 # School hosting at pribadidepok.sch.id/seragam
 
