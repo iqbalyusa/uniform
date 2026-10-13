@@ -8,24 +8,54 @@ Gunakan Node.js 22.13 atau lebih baru, lalu:
 
 ```sh
 npm ci
-npm run build
 npm run dev
 ```
 
-Buka http://127.0.0.1:5173. Pratinjau hanya mendengarkan loopback dan langsung membuka mode bersama tanpa akun aplikasi. Database SQLite tersimpan di `.sites-runtime/preview.sqlite`; data pratinjau tidak masuk paket penerbitan. Setelah mengubah kode, jalankan build dan mulai ulang pratinjau.
+`npm run dev` membangun aplikasi lalu membuka http://127.0.0.1:5173 (hanya loopback). Database pengembangan tersimpan di `.data/dev.sqlite` dan diabaikan Git. Setelah mengubah kode, hentikan lalu jalankan ulang `npm run dev`.
 
 ```sh
 npm test
 npx tsc --noEmit
 ```
 
-## Hosting dan akses
+## Cara kerja
 
-Versi online memakai Cloudflare Worker, database D1 bersama, serta **Sign in with ChatGPT** yang dikelola Sites. Build menggunakan esbuild; paket distribusi ada di `dist`. Manifest `.openai/hosting.json` mengikat situs dan database. Migrasi SQL berurutan ada di `drizzle` dan disertakan pada paket penerbitan.
+Aplikasi berjalan sebagai satu server Node.js (`app.cjs` → `server/index.mjs`) tanpa layanan pihak ketiga:
 
-Pengelolaan akun aplikasi **dinonaktifkan sementara** melalui `accountsEnabled = false` di `lib/access.ts`. Semua pengunjung yang dapat membuka situs bisa mencatat penerimaan, pengeluaran, penyesuaian, impor, cadangan, dan pengaturan stok tanpa mendaftarkan petugas. Halaman Petugas & akses disembunyikan dan endpoint pengelolaan anggota dinonaktifkan. Daftar anggota lama, termasuk Rahma dan Afro, tetap tersimpan; ubah flag menjadi `true`, build, lalu deploy untuk mengaktifkan kembali aturan akun dan peran sebelumnya.
+- `npm run build` (esbuild) menghasilkan halaman browser di `dist/public` dan API di `dist/api.mjs`.
+- Server menyajikan halaman tersebut dan menangani `/api/...` memakai aturan stok di `lib/server.ts`.
+- Data disimpan dalam **satu berkas SQLite** (`node:sqlite`, bawaan Node.js 22.13+). Migrasi di `drizzle` dijalankan otomatis saat server mulai.
 
-Situs tetap **privat di Sites**. Akses hosting masih memerlukan akun ChatGPT yang diizinkan pemilik. Mode bersama ini tidak mengubah daftar akses hosting atau mengirim undangan.
+Variabel lingkungan:
+
+| Nama | Fungsi | Bawaan |
+|---|---|---|
+| `SERAGAM_DATABASE_PATH` | Lokasi berkas database | `~/seragam-data/inventory.sqlite` |
+| `SERAGAM_PASSWORD` | Kata sandi masuk (prompt browser). **Wajib diisi untuk hosting online.** | kosong = tanpa kata sandi |
+| `SERAGAM_USER` | Nama pengguna untuk kata sandi di atas | `seragam` |
+| `SERAGAM_ORIGIN` | Alamat publik, mis. `https://uniform.pribadidepok.sch.id`, bila proxy menyembunyikan HTTPS | dibaca dari permintaan |
+| `PORT` | Port server | `3000` |
+
+Database sengaja disimpan di luar folder aplikasi dan `public_html`, sehingga pembaruan Git dan build ulang tidak menyentuh data. Cadangkan berkas `inventory.sqlite` secara berkala.
+
+## Hosting dengan Node.js (cPanel)
+
+1. Unggah atau `git clone` repositori ke folder di luar `public_html`, misalnya `~/seragam-app`.
+2. Di cPanel **Setup Node.js App** → *Create Application*: Node.js 22.13 atau lebih baru, mode *Production*, Application root `seragam-app`, Application URL domain/subdomain tujuan, Startup file `app.cjs`.
+3. Tambahkan variabel lingkungan `SERAGAM_PASSWORD` (dan `SERAGAM_ORIGIN` bila diperlukan), lalu simpan.
+4. Buka **Terminal** cPanel, aktifkan lingkungan Node.js (perintah `source ...` tertera di atas halaman aplikasi), lalu:
+   ```sh
+   cd ~/seragam-app
+   npm ci --include=dev
+   npm run build
+   ```
+5. Klik **Restart** pada halaman aplikasi dan buka alamatnya.
+
+Untuk pembaruan: `git pull`, `npm ci --include=dev`, `npm run build`, lalu Restart. Data tetap di `~/seragam-data/inventory.sqlite`.
+
+## Akses
+
+Pengelolaan akun aplikasi **dinonaktifkan sementara** melalui `accountsEnabled = false` di `lib/access.ts`. Semua orang yang dapat membuka aplikasi bisa mencatat penerimaan, pengeluaran, penyesuaian, impor, cadangan, dan pengaturan stok. Karena itu lindungi hosting online dengan `SERAGAM_PASSWORD`. Daftar anggota lama, termasuk Rahma dan Afro, tetap tersimpan di database. Mode akun dulu bergantung pada Sign in with ChatGPT dari hosting lama dan belum memiliki pengganti, jadi biarkan flag tetap `false`.
 
 ## Aturan stok
 
@@ -43,8 +73,8 @@ Impor `.xlsx`, CSV, atau JSON sampai 5 MB. Pilih lembar, baris judul, bentuk tab
 
 Cadangan JSON mencakup stok dan riwayat. Riwayat dari prototype/berkas lama disimpan sebagai arsip sumber, tanpa mengatasnamakan akun pengguna baru. Ekspor stok dan riwayat menggunakan Excel.
 
-Repositori publik ini hanya berisi kode aplikasi dan migrasi skema. Data stok operasional, database lokal, ekspor inventaris, dan migrasi impor workbook tidak disertakan. Aplikasi dimulai dengan saldo kosong; impor stok nyata melalui halaman Impor & cadangan pada hosting privat. Manifest belum diikat ke proyek Sites tertentu.
+Repositori publik ini hanya berisi kode aplikasi dan migrasi skema. Data stok operasional, database lokal, ekspor inventaris, dan migrasi impor workbook tidak disertakan. Aplikasi dimulai dengan saldo kosong; impor stok nyata melalui halaman Impor & cadangan.
 
 ## Struktur
 
-`app/uniform-app.tsx` dan `app/import-panel.tsx` berisi UI; `lib/server.ts` menangani izin dan transaksi; `worker/index.ts` menangani HTTP; `db/schema.ts` dan `drizzle` berisi skema/migrasi. `tests` menguji aturan stok, akses, transaksi bersamaan, dan impor. `PRODUCT.md` dan `DESIGN.md` merekam konteks produk dan sistem desain.
+`app/uniform-app.tsx` dan `app/import-panel.tsx` berisi UI; `lib/server.ts` menangani izin dan transaksi; `server/index.mjs` menangani HTTP dan `server/database.mjs` membuka database SQLite; `db/schema.ts` dan `drizzle` berisi skema/migrasi. `tests` menguji aturan stok, akses, transaksi bersamaan, dan impor. `PRODUCT.md` dan `DESIGN.md` merekam konteks produk dan sistem desain.
