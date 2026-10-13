@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
-import {mkdirSync,mkdtempSync,writeFileSync,readFileSync,symlinkSync,realpathSync,existsSync,lstatSync,rmSync} from 'node:fs';
+import {mkdirSync,mkdtempSync,writeFileSync,readFileSync,symlinkSync,realpathSync,existsSync,lstatSync,rmSync,unlinkSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join,relative} from 'node:path';
 import {relocateApp} from '../hosting/node/relocate.mjs';
@@ -56,6 +56,11 @@ test('relative node_modules links continue resolving to the existing CloudLinux 
   const modules=join(f.accountHome,'nodevenv/repositories/seragam-app/22/lib/node_modules');mkdirSync(modules,{recursive:true});
   symlinkSync(relative(f.source,modules),join(f.source,'node_modules'),'dir');
   const result=relocateApp(f);assert.equal(realpathSync(join(result.target,'node_modules')),modules);
+  const alias=join(f.accountHome,'nodevenv/public_html/seragam-app');
+  assert.equal(realpathSync(alias),join(f.accountHome,'nodevenv/repositories/seragam-app'));
+  unlinkSync(alias);
+  assert.equal(relocateApp(f).alreadyMoved,true);
+  assert.equal(realpathSync(alias),join(f.accountHome,'nodevenv/repositories/seragam-app'));
  }finally{f.close();}
 });
 

@@ -31,6 +31,15 @@ In **Setup Node.js App**, edit the existing application:
 - Set `SERAGAM_BASE_PATH=/`.
 - Save and restart the app.
 
+If Save reports that it cannot find `/home/pribadisch/nodevenv/public_html/seragam-app`, Node Selector resolved the relocated app's real path. Add the environment alias without moving or rebuilding the existing environment:
+
+```sh
+mkdir -p ~/nodevenv/public_html
+ln -sT ~/nodevenv/repositories/seragam-app ~/nodevenv/public_html/seragam-app
+```
+
+Then save and restart again. If the link command reports that the destination already exists, inspect that path rather than deleting or replacing it. The relocation helper also maintains this environment alias, including when rerun on an app that has already moved.
+
 This changes the URL without relocating its application root, Node.js environment or database. Do not run the Cloudflare migration again. Use the new domain for transactions after the change.
 
 The build creates an allow rule in its public `.htaccess` to override the repository's deny rule only for browser files. It preserves Passenger directives added to that public file by cPanel during future staged builds. The root repository stays protected, and the Node server refuses hidden-file requests.

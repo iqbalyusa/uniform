@@ -12,3 +12,4 @@ else{
  console.log('Passenger restart requested. Keep the existing cPanel Application root and activation command.');
  console.log('School app URL remains https://pribadidepok.sch.id/seragam/. Direct access to /seragam-app is blocked.');
 }
+if(result.environmentLink)console.log('Node Selector environment alias: '+result.environmentLink.path+' -> '+result.environmentLink.target);

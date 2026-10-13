@@ -1,17 +1,31 @@
 import {DatabaseSync} from 'node:sqlite';
 import {execFileSync} from 'node:child_process';
 import {chmodSync,existsSync,lstatSync,mkdirSync,readFileSync,readlinkSync,realpathSync,renameSync,symlinkSync,unlinkSync,writeFileSync} from 'node:fs';
-import {join,relative,isAbsolute,sep} from 'node:path';
+import {dirname,join,relative,isAbsolute,sep} from 'node:path';
 
 const present=path=>{try{lstatSync(path);return true;}catch(error){if(error.code==='ENOENT')return false;throw error;}};
 const inside=(parent,path)=>{const rel=relative(parent,path);return !isAbsolute(rel)&&rel!=='..'&&!rel.startsWith('..'+sep);};
 const replaceLink=(path,target)=>{if(present(path)){if(!lstatSync(path).isSymbolicLink())throw Error('Refusing to replace a real directory: '+path);unlinkSync(path);}symlinkSync(target,path,'dir');};
 
+function environmentAlias(accountHome,source,target){
+ const envHome=join(accountHome,'nodevenv'),path=join(envHome,relative(accountHome,target));
+ const candidates=[...(source===target?[]:[join(envHome,relative(accountHome,source))]),join(envHome,'repositories/seragam-app'),join(envHome,'seragam-app'),path];
+ const environment=candidates.find(candidate=>existsSync(candidate)&&lstatSync(realpathSync(candidate)).isDirectory());
+ if(!environment)return null;
+ const actual=realpathSync(environment);
+ if(present(path)){
+  if(realpathSync(path)!==actual)throw Error('A different Node.js environment occupies the public_html alias. Nothing was replaced.');
+  return {path,target:actual,created:false};
+ }
+ mkdirSync(dirname(path),{recursive:true});symlinkSync(actual,path,'dir');
+ return {path,target:actual,created:true};
+}
+
 export function relocateApp({source,accountHome,databasePath}){
  source=realpathSync(source);accountHome=realpathSync(accountHome);
  const publicRoot=realpathSync(join(accountHome,'public_html')),target=join(publicRoot,'seragam-app'),legacy=join(accountHome,'seragam-app');
  if(!/^Require all denied\s*$/m.test(readFileSync(join(source,'.htaccess'),'utf8')))throw Error('Repository HTTP protection is missing. Pull the latest GitHub code first.');
- if(source===target)return {alreadyMoved:true,target};
+ if(source===target)return {alreadyMoved:true,target,environmentLink:environmentAlias(accountHome,source,target)};
  if(inside(source,target)||inside(target,source))throw Error('Source and destination must be separate directories.');
  if(present(target))throw Error('Destination already exists. Nothing was moved: '+target);
  if(!existsSync(join(source,'app.cjs'))||!existsSync(join(source,'hostinger-dist/public/index.html')))throw Error('The source must be the existing built Node.js app.');
@@ -34,7 +48,7 @@ export function relocateApp({source,accountHome,databasePath}){
  const sourceBackup=join(backupDir,'app-source.tar.gz');
  execFileSync('tar',['--exclude=./node_modules','-czf',sourceBackup,'-C',source,'.']);chmodSync(sourceBackup,0o600);
  writeFileSync(join(backupDir,'paths.json'),JSON.stringify({source,target,legacy,originalLegacy,databasePath,modulesLink},null,2),{mode:0o600});
- let moved=false,sourceLinked=false,legacyLinked=false,modulesChanged=false;
+ let moved=false,sourceLinked=false,legacyLinked=false,modulesChanged=false,environmentLink;
  try{
   renameSync(source,target);moved=true;
   symlinkSync(target,source,'dir');sourceLinked=true;
@@ -43,11 +57,14 @@ export function relocateApp({source,accountHome,databasePath}){
   if(modulesLink!==null&&!isAbsolute(modulesLink)){
    modulesChanged=true;replaceLink(join(target,'node_modules'),inside(source,modulesTarget)?join(target,relative(source,modulesTarget)):modulesTarget);
   }
+  // Node Selector resolves the real app root and looks up the matching venv path.
+  environmentLink=environmentAlias(accountHome,source,target);
   mkdirSync(join(target,'tmp'),{recursive:true});writeFileSync(join(target,'tmp/restart.txt'),'');
-  return {target,source,legacy,backupDir,databasePath};
+  return {target,source,legacy,backupDir,databasePath,environmentLink};
  }catch(error){
   // Restore the original layout if any step after the directory rename fails.
   try{
+   if(environmentLink?.created)unlinkSync(environmentLink.path);
    if(modulesChanged)replaceLink(join(target,'node_modules'),modulesLink);
    if(legacyLinked){if(present(legacy))unlinkSync(legacy);if(originalLegacy!==undefined)symlinkSync(originalLegacy,legacy,'dir');}
    if(sourceLinked)unlinkSync(source);
