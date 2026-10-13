@@ -34,35 +34,35 @@ colors:
   dark-amber-soft: "#3a3223"
 typography:
   headline:
-    fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
+    fontFamily: "'Geist', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
     fontSize: "29px"
     fontWeight: 700
     lineHeight: 1.25
     letterSpacing: "-.03em"
   title:
-    fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
+    fontFamily: "'Geist', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
     fontSize: "16px"
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: "-.015em"
   body:
-    fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
+    fontFamily: "'Geist', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
   label:
-    fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
+    fontFamily: "'Geist', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
     fontSize: "12px"
     fontWeight: 600
   metric:
-    fontFamily: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
+    fontFamily: "'Geist', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
     fontSize: "34px"
     fontWeight: 600
     lineHeight: 1.4
     letterSpacing: "-.03em"
 rounded:
-  panel: "14px"
-  control: "8px"
+  panel: "16px"
+  control: "10px"
   brand: "12px"
   entry: "18px"
   tag: "5px"
@@ -130,7 +130,7 @@ The workspace is compact and operational. Tables, direct Indonesian labels, visi
 **Key Characteristics:**
 - White working surfaces and navy hierarchy
 - Blue actions, selection, and focus
-- Self-hosted Inter and tabular quantities
+- Self-hosted Geist and tabular quantities
 - Horizontal size matrices and exact-cell movement handoff
 - Name and total kept visible on mobile
 
@@ -158,7 +158,7 @@ Dark mode maps these roles to the dark-prefixed tokens: deep navy ground, navy s
 
 ## Typography
 
-**Display and Body Font:** Inter, with the system and Arial fallbacks recorded in frontmatter. Inter is self-hosted through the 400, 500, 600, and 700 Latin font files; new interface text uses these available weights.
+**Display and Body Font:** Geist, with the system and Arial fallbacks recorded in frontmatter. Geist is self-hosted through the 400, 500, 600, and 700 Latin font files; new interface text uses these available weights.
 
 The type is direct and compact. Headings establish the destination, body copy explains the task, and small supporting text stays secondary. Numeric quantities use tabular figures so changes do not disrupt alignment.
 
@@ -179,7 +179,7 @@ The desktop shell uses a white navigation rail (240px) and a flexible workspace.
 
 At 1250px and below, the rail becomes 220px and content insets become 26px. At 1050px and below, the dashboard, movement, import, and settings columns collapse. At 768px and below, navigation becomes a 240px drawer with a dim navy backdrop, the topbar becomes 60px high, and content uses the mobile-inset token. Metrics form a two-column grid. Below 400px, form fields form one column.
 
-The mobile overview keeps each uniform name and its total together. Intermediate category and old/new breakdown columns are hidden only in that overview; its total remains visible. Inventory retains horizontal size matrices instead of collapsing each size into a card. Matrix tables scroll within their own surface, and the size-system label remains sticky on the left. Desktop matrix minimum width is 860px; mobile is 820px. Header totals remain outside the scroller.
+The mobile overview keeps each uniform name and its total together. Geistmediate category and old/new breakdown columns are hidden only in that overview; its total remains visible. Inventory retains horizontal size matrices instead of collapsing each size into a card. Matrix tables scroll within their own surface, and the size-system label remains sticky on the left. Desktop matrix minimum width is 860px; mobile is 820px. Header totals remain outside the scroller.
 
 Keep uniform name and total visible around the horizontal matrix, and keep size-system identity attached to the quantities while scrolling.
 
@@ -257,3 +257,13 @@ The import workflow uses the same panel, field, button, and status language. A d
 ## Application title and navigation copy
 
 Manajemen Seragam is the application title beneath the school logo, set at 22px with navy text and weight 600. Navigation omits Ruang kerja sekolah, database explanations, and shared-mode labels. The dashboard omits the two-size-system explanation card; inventory context and size-system labels remain attached to actual stock data.
+
+## Taste modernisation · 2026-10-13
+
+Direction: preserve the Pribadi identity while modernising a task-focused school inventory app. Use the existing React and CSS stack, white and navy surfaces, one blue action accent, the school logo, and self-hosted Geist in 400/500/600/700 weights.
+
+Audit: the original hierarchy made four stock totals equally prominent, labels and tables were small, and spacing differed between stock, movement, and history screens. The update emphasises total inventory with a pale blue cell, strengthens page titles and numeric hierarchy, and aligns controls, table text, and spacing across the workflow. Navigation keeps its labels and highlights the selected destination without a decorative dot.
+
+Desktop navigation is 248px wide, narrowing to 224px on compact screens; mobile uses the existing off-canvas drawer. Headlines use 32px desktop and 25–27px mobile. Controls use 44px or larger targets, 13–14px desktop text, and 16px mobile field text. Panels use 16px corners and controls use 10px corners. Hover and press feedback are restrained; the short page-heading entrance respects reduced motion. Dark mode preserves the same hierarchy and semantic status colours.
+
+Preserve the removed workspace/database/mode labels and explanation card. Stock matrices retain horizontal scrolling, exact-size handoff, and complete quantities. Multiple-item student purchases retain atomic saving, validation, and their complete before/after stock review.

@@ -117,3 +117,109 @@ input,textarea{caret-color:var(--accent)}
 .entry-brand>span{font-size:22px;line-height:1.25;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
 .movement-panel .form-actions{justify-content:flex-end}
 @media(max-width:1050px){.dashboard-side{grid-template-columns:1fr}}
+
+/* Taste Redesign: a focused school inventory workspace, built on the existing UI. */
+:root{--font-app:'Geist',system-ui,-apple-system,BlinkMacSystemFont,Arial,sans-serif;--bg:#f5f7fa;--surface-soft:#f1f5f9;--line:#e0e7ef;--radius:16px;--control-radius:10px;--panel-shadow:0 2px 8px #12233c04}
+[data-theme=dark]{--bg:#0c1625;--surface:#142237;--surface-soft:#1a2c43;--line:#32465e;--panel-shadow:0 2px 8px #000e2710}
+body{font-family:var(--font-app);font-size:14px;line-height:1.55}
+h1,h2,h3{font-family:var(--font-app);text-wrap:balance}
+h1,.page-heading h1{font-size:32px;letter-spacing:-.035em;line-height:1.15;font-weight:600}
+.page-heading{margin-bottom:28px;gap:24px}
+.page-heading p{font-size:14px;line-height:1.65;margin-top:10px;max-width:65ch;text-wrap:pretty}
+.app-shell{grid-template-columns:248px minmax(0,1fr)}
+.sidebar{padding:24px 18px;border-right:1px solid var(--line)}
+.brand{padding:4px 14px 32px;gap:18px}
+.school-logo{width:164px;max-width:100%;height:auto}
+.brand-context{font-family:var(--font-app);font-size:25px;letter-spacing:-.035em;line-height:1.16;font-weight:600;padding-top:18px}
+.sidebar nav{gap:6px}
+.sidebar nav button{font-size:13px;min-height:48px;padding:13px 14px;border-radius:10px;gap:12px;line-height:1.4}
+.sidebar nav button svg{stroke-width:1.7;flex-shrink:0}
+.sidebar nav button.active{background:var(--accent-soft);font-weight:600}
+.topbar{height:76px;padding-inline:36px}
+.breadcrumb{font-size:13px;gap:14px}
+.breadcrumb strong{font-weight:500;color:var(--ink)}
+.topbar-actions{gap:6px}
+.icon-button{min-width:40px;min-height:40px;border-radius:10px}
+main#main{max-width:1480px;padding:36px 36px 24px}
+.panel{border-radius:var(--radius);box-shadow:var(--panel-shadow)}
+.panel-title h2{font-size:17px;font-weight:600;letter-spacing:-.025em}
+.panel-title p{font-size:13px;line-height:1.6;margin-top:6px}
+.primary,.secondary{min-height:44px;border-radius:var(--control-radius);font-size:13px;font-weight:500;padding:11px 17px}
+.primary,.secondary,.icon-button,.text-button,.sidebar nav button,.stock-cell,.item-link{transition:background-color .18s ease,color .18s ease,border-color .18s ease,transform .18s ease}
+.primary:hover:not(:disabled){box-shadow:0 3px 9px #0069aa18}
+.secondary:active,.primary:active{transform:translateY(1px)}
+.dashboard-lookup{margin-bottom:24px;gap:12px}
+.dashboard-lookup .search-field{min-height:48px}
+.dashboard-lookup input{font-size:14px;padding-block:12px}
+.metrics{padding:0;grid-template-columns:1.2fr 1fr 1fr 1fr;border-radius:16px;overflow:hidden;margin-bottom:28px}
+.metrics>div,.metrics>button{padding:24px;border-right:1px solid var(--line)}
+.metrics .metric-total{background:var(--accent-soft)}
+.metrics span{font-size:13px;font-weight:500;gap:8px}
+.metrics .metric-total>span{color:var(--accent)}
+.metrics strong{font-size:38px;line-height:1.15;letter-spacing:-.04em;margin:14px 0 10px;font-weight:600}
+.metrics .metric-total strong{font-size:44px;color:var(--accent)}
+.metrics strong small{font-size:12px;margin-left:7px;font-weight:400;letter-spacing:0}
+.metrics p{font-size:12px;line-height:1.5}
+.metrics button:hover{background:var(--surface-soft)}
+.dashboard-grid{grid-template-columns:minmax(0,1fr) 310px;gap:24px}
+.overview{padding-top:24px}
+.overview th{font-size:12px;font-weight:500;background:var(--surface-soft)}
+.overview td{font-size:13px;padding-block:16px}
+.item-link{font-weight:500;text-align:left;line-height:1.5}
+.overview tbody tr:hover{background:var(--surface-soft)}
+.level{font-size:11px;padding:4px 7px;border-radius:6px;font-weight:500}
+.activity-list{margin-top:6px}
+.activity{padding-block:18px;gap:12px}
+.activity strong{font-size:13px;font-weight:500}
+.activity p{font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.activity small{font-size:11px;line-height:1.6}
+.activity-icon{border-radius:10px}
+.stock-alert{margin-bottom:24px;padding:18px 22px;border-radius:12px}
+.inventory-controls{padding:20px 24px}
+.search-field{min-height:44px;border-radius:10px}
+.search-field input{font-size:13px}
+.tabs button{font-size:12px;min-height:40px;border-radius:8px}
+.select-filters select{font-size:12px;min-height:40px}
+.matrix-heading{padding:0 24px 20px;gap:20px}
+.matrix-heading h2{font-size:17px;line-height:1.45;letter-spacing:-.025em}
+.matrix-heading p{font-size:12px}
+.matrix-total strong{font-size:25px;font-weight:600}
+.matrix-total span{font-size:11px}
+.uniform-matrix{padding-top:24px;margin-bottom:20px}
+.size-matrix th{font-size:12px}
+.size-matrix td strong{font-size:16px}
+.size-matrix td span{font-size:11px}
+.movement-panel{padding:28px}
+.segmented{padding:5px;gap:5px;border-radius:12px;margin-bottom:28px}
+.segmented button{font-size:13px;font-weight:500;border-radius:8px;min-height:44px}
+.field{font-size:13px;font-weight:500;gap:8px;margin-bottom:22px}
+.field input,.field select,.field textarea{font-size:14px;min-height:46px;padding:11px 13px;border-radius:10px}
+.field small{font-size:11px;line-height:1.6}
+.form-grid{gap:0 22px}
+.form-section{padding-top:24px;margin-bottom:22px}
+.form-section h3,.purchase-first-heading,.purchase-item legend{font-size:15px;font-weight:500}
+.form-section p{font-size:12px;line-height:1.6}
+.stock-preview{padding:26px}
+.stock-preview h2{font-size:19px;line-height:1.4;letter-spacing:-.025em}
+.stock-preview>p{font-size:12px;line-height:1.7}
+.purchase-review-heading{font-size:13px}
+.purchase-review li>p,.purchase-review-stock{font-size:12px}
+.purchase-total>strong{font-size:32px}
+.balance-result{border-radius:12px;padding:20px}
+.balance-result strong{font-size:34px;letter-spacing:-.03em}
+.history-table th{font-size:12px;font-weight:500}
+.history-table td,.history-table strong{font-size:12px}
+.history-table small{font-size:11px}
+.history-controls .field{font-size:12px}
+.history-controls input,.history-controls select{font-size:13px;min-height:44px}
+.badge{font-size:11px;border-radius:6px;padding:5px 8px}
+.error{font-size:13px;line-height:1.65;border-radius:10px}
+.entry-content h1{font-family:var(--font-app)}
+.workspace-footer{font-size:11px;margin-top:32px}
+@keyframes workspace-arrive{from{opacity:.9;transform:translateY(4px)}to{opacity:1;transform:none}}
+.page-heading{animation:workspace-arrive .22s ease-out both}
+@media(max-width:1250px){.app-shell{grid-template-columns:224px minmax(0,1fr)}.sidebar{padding-inline:14px}.brand{padding-inline:10px}.brand-context{font-size:24px}.topbar{padding-inline:26px}main#main{padding:30px 26px 24px}.dashboard-grid{grid-template-columns:minmax(0,1fr) 280px;gap:20px}.metrics>div,.metrics>button{padding:20px}.metrics strong{font-size:32px}.metrics .metric-total strong{font-size:38px}}
+@media(max-width:1050px){.dashboard-grid{grid-template-columns:1fr}.metrics>div,.metrics>button{padding:18px}.metrics span{font-size:12px}.metrics p{font-size:11px}.metrics strong{font-size:30px}.metrics .metric-total strong{font-size:34px}}
+@media(max-width:768px){.app-shell{grid-template-columns:1fr}.sidebar{width:248px;padding:24px 18px}.brand{padding:4px 14px 28px}.brand-context{font-size:25px}.topbar{height:64px;padding-inline:16px}.breadcrumb{font-size:12px;gap:8px}.topbar-actions{gap:2px}.topbar-actions .icon-button{min-width:40px;min-height:40px}.connection{font-size:10px}main#main{padding:28px 16px 20px}.page-heading{gap:12px;margin-bottom:24px}.page-heading h1{font-size:27px}.page-heading p{font-size:13px;margin-top:8px}.page-heading>.primary{min-height:44px;padding:10px 12px;font-size:12px}.dashboard-lookup{gap:10px;flex-wrap:wrap}.dashboard-lookup .search-field{min-width:0;flex:1}.dashboard-lookup input{font-size:16px}.metrics{grid-template-columns:1fr 1fr;margin-bottom:24px}.metrics>div,.metrics>button{padding:20px 16px}.metrics strong,.metrics .metric-total strong{font-size:34px}.metrics span,.metrics p{font-size:11px}.metrics strong small{font-size:11px}.dashboard-grid{gap:20px}.overview td{font-size:12px;padding-block:16px}.overview .panel-title{gap:12px}.panel-title h2{font-size:16px}.panel-title p{font-size:12px}.inventory-controls{padding:18px 16px}.tabs button{font-size:11px;padding-inline:10px}.select-filters select{font-size:12px;min-height:44px}.matrix-heading{padding:0 16px 18px;gap:14px}.matrix-heading h2{font-size:16px}.matrix-heading p{font-size:11px}.movement-panel{padding:20px 18px}.segmented button{font-size:11px;gap:5px}.field{font-size:13px}.field input,.field select,.field textarea{font-size:16px;min-height:46px}.purchase-items>.secondary{font-size:13px}.stock-preview h2{font-size:18px}.history-controls input,.history-controls select,.search-field input{font-size:16px}.workspace-footer{font-size:10px;gap:6px}.stock-alert{padding:18px}.icon-button{min-height:44px;min-width:44px}}
+@media(max-width:400px){.dashboard-lookup .search-field{flex-basis:100%}.dashboard-lookup>.secondary{width:100%}.page-heading h1{font-size:25px}.page-heading>.primary{font-size:11px;padding-inline:10px}}
+@media(prefers-reduced-motion:reduce){.page-heading{animation:none}.primary,.secondary,.icon-button,.text-button,.sidebar nav button,.stock-cell,.item-link{transition:none}}
