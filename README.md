@@ -51,7 +51,13 @@ Database sengaja disimpan di luar folder aplikasi dan `public_html`, sehingga pe
    ```
 5. Klik **Restart** pada halaman aplikasi dan buka alamatnya.
 
-Untuk pembaruan: `git pull`, `npm ci --include=dev`, `npm run build`, lalu Restart. Data tetap di `~/seragam-data/inventory.sqlite`.
+Untuk pembaruan cukup satu perintah di Terminal:
+
+```sh
+bash ~/repositories/uniform/update.sh
+```
+
+Skrip ini mengaktifkan lingkungan Node.js, mengambil kode terbaru (`git pull`), memasang paket, membangun ulang, lalu memulai ulang aplikasi tanpa perlu klik Restart di cPanel. Data tetap di `~/seragam-data/inventory.sqlite`.
 
 ### Menyalin data dari Cloudflare
 
