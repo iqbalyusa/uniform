@@ -33,6 +33,8 @@ test('Node server serves the page and the inventory API',async()=>{
  const origin=`http://127.0.0.1:${server.address().port}`;
  try{
   const page=await fetch(origin+'/');assert.equal(page.status,200);assert.equal(await page.text(),'<html>seragam</html>');
+  writeFileSync(join(publicRoot,'index.html'),'<html>rebuilt</html>');
+  assert.equal(await (await fetch(origin+'/')).text(),'<html>rebuilt</html>','a rebuild must show without restarting');
   assert.equal((await fetch(origin+'/../secret.txt')).status,404);
   assert.equal((await fetch(origin+'/.env')).status,404);
   const move={id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',staffName:'Anna Ratna',quantity:2,revision:0,date:'2026-01-01'};
