@@ -66,3 +66,5 @@ next-env.d.ts
 *.tsbuildinfo
 /inventory-exports/
 /backups/
+
+/school-dist/
