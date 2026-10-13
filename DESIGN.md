@@ -125,7 +125,7 @@ components:
 
 Pribadi’s school identity gives daily stock administration a clear, coherent home. White navigation and working surfaces carry navy text, while blue identifies actions, selected sizes, and active destinations. The official school logo sits directly on the sidebar with no colored box; retain its original red detail and proportions.
 
-The workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, settings, and the optional navy dark theme. Temporary shared mode hides application sign-in and officer management; the rail identifies Mode bersama instead of an officer or role. Preserved account screens remain available when account enforcement is restored.
+The workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, settings, and the optional navy dark theme. Temporary shared mode hides application sign-in and officer management; the rail omits technical connection and shared-mode labels. Preserved account screens remain available when account enforcement is restored.
 
 **Key Characteristics:**
 - White working surfaces and navy hierarchy
@@ -213,7 +213,7 @@ A student purchase uses one recipient section and flat, numbered uniform groups 
 
 ### Navigation
 
-The rail has the school logo directly on its surface, a white destination list, and the current shared-mode indicator at the bottom (account details when accounts are enabled). Navigation targets have a minimum 44px height. Active destinations use pale blue, blue text, weight 700, and a blue dot; hover uses a soft surface. On mobile, the menu opens the drawer and the backdrop closes it. A destination selection closes the drawer.
+The rail has the school logo directly on its surface, a white destination list, and account details at the bottom only when accounts are enabled. Navigation targets have a minimum 44px height. Active destinations use pale blue, blue text, weight 700, and a blue dot; hover uses a soft surface. On mobile, the menu opens the drawer and the backdrop closes it. A destination selection closes the drawer.
 
 ### Cards / Containers
 
@@ -253,3 +253,7 @@ The import workflow uses the same panel, field, button, and status language. A d
 - **Don't** combine old and new size identity in a stock cell.
 - **Don't** add heavy shadows to ordinary working panels.
 - **Don't** use color alone to indicate low stock, empty stock, or validation.
+
+## Application title and navigation copy
+
+Manajemen Seragam is the application title beneath the school logo, set at 22px with navy text and weight 600. Navigation omits Ruang kerja sekolah, database explanations, and shared-mode labels. The dashboard omits the two-size-system explanation card; inventory context and size-system labels remain attached to actual stock data.
