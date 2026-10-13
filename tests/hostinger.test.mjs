@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtempSync,rmSync} from 'node:fs';
-import {tmpdir} from 'node:os';
+import {tmpdir,homedir} from 'node:os';
 import {join} from 'node:path';
 async function fixture(){
  const dir=mkdtempSync(join(tmpdir(),'seragam-hostinger-'));
@@ -33,4 +33,10 @@ test('Hostinger inventory, selected Staff and backups persist after closing and 
   assert.deepEqual(JSON.parse((await current.DB.prepare('SELECT data FROM backups').first()).data),{stock:{'0|Lama|1-2':8}});
   assert.throws(()=>current.sqlite.prepare('DELETE FROM history').run(),/immutable/);
  }finally{current.sqlite.close();rmSync(dir,{recursive:true,force:true});}
+});
+
+test('default Hostinger database location is independent of the Git checkout',async()=>{
+ const original=process.env.SERAGAM_DATABASE_PATH;delete process.env.SERAGAM_DATABASE_PATH;
+ try{const module=await import(`../hosting/node/database.mjs?location=${crypto.randomUUID()}`);assert.equal(module.databasePath,join(homedir(),'seragam-data','inventory.sqlite'));}
+ finally{if(original!==undefined)process.env.SERAGAM_DATABASE_PATH=original;}
 });

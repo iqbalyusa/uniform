@@ -2,8 +2,9 @@ import {DatabaseSync} from 'node:sqlite';
 import {mkdirSync,readdirSync,readFileSync} from 'node:fs';
 import {dirname,resolve,relative,isAbsolute,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {homedir} from 'node:os';
 export const projectRoot=fileURLToPath(new URL('../../',import.meta.url));
-export const databasePath=resolve(process.env.SERAGAM_DATABASE_PATH||resolve(projectRoot,'..','seragam-data','inventory.sqlite'));
+export const databasePath=resolve(process.env.SERAGAM_DATABASE_PATH||resolve(homedir(),'seragam-data','inventory.sqlite'));
 export function openDatabase(){
  const rel=relative(projectRoot,databasePath);
  if((!rel.startsWith('..'+sep)&&!isAbsolute(rel))||databasePath.split(sep).includes('public_html'))throw Error('Keep the database outside the Git checkout and public_html.');

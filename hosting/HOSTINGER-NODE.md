@@ -7,7 +7,7 @@ This is the full Hostinger version. It runs a Node.js server and a persistent SQ
 Open **Git Version Control → Create**. Enable **Clone a Repository** and enter:
 
 - Clone URL: `https://github.com/iqbalyusa/uniform.git`
-- Repository Path: `seragam-app` in the account home directory, outside `public_html`.
+- Repository Path: `repositories/seragam-app` in the account home directory, outside `public_html`.
 - Repository Name: `seragam`.
 
 Create the repository. Keep the Git checkout outside WordPress's public directory because it contains server code and configuration.
@@ -18,7 +18,7 @@ Open **Setup Node.js App → Create Application**:
 
 - Node.js version: **22.13 or newer**. The built-in SQLite database requires this version.
 - Application mode: Production.
-- Application root: `seragam-app` (the Git checkout).
+- Application root: `repositories/seragam-app` (the Git checkout).
 - Application URL: select `pribadidepok.sch.id`, with URI `/seragam`.
 - Application startup file: `app.cjs`.
 - Environment variable `SERAGAM_ORIGIN`: `https://pribadidepok.sch.id` (no `/seragam` suffix).
@@ -35,7 +35,7 @@ Open **Terminal**, paste the environment activation command from Setup Node.js A
 bash hosting/node/deploy.sh
 ```
 
-The app uses the existing React UI and compiles its API for Node.js. cPanel serves it at `/seragam`. The default database location is a separate `seragam-data/inventory.sqlite` folder beside the checkout, outside both Git and `public_html`.
+The app uses the existing React UI and compiles its API for Node.js. cPanel serves it at `/seragam`. The default database location is `~/seragam-data/inventory.sqlite`, independent of the checkout location, outside both Git and `public_html`.
 
 ## 4. Import the operational database
 
@@ -44,7 +44,7 @@ Pause entry in the old Cloudflare app during the final transfer. Use a fresh exp
 Upload the supplied private migration JSON into the account home directory, outside `public_html`, using File Manager. From the repository directory in the activated Node.js environment, run:
 
 ```sh
-npm run import:hostinger -- ../seragam-hostinger-migration.json
+npm run import:hostinger -- ~/seragam-hostinger-migration.json
 ```
 
 This imports stock, revisions, complete activity history, Staff names, settings and the saved backups included in the archive. It refuses to overwrite an already populated database. The private migration file and the SQLite database must never be committed to Git or put inside `public_html`.
@@ -77,3 +77,21 @@ Use **Impor & cadangan** to download backups before updates and periodically. A 
 Optional `SERAGAM_DATABASE_PATH` selects a different absolute SQLite path. Set the same value during import and at runtime. Keep it outside the checkout and public website directory.
 
 The current shared-editing behavior and Staff selector are preserved. Existing account enforcement is not enabled by this deployment.
+
+## Placing the checkout in repositories
+
+Keep the existing app available while creating the new checkout:
+
+```sh
+mkdir -p ~/repositories
+git clone https://github.com/iqbalyusa/uniform.git ~/repositories/seragam-app
+```
+
+In Setup Node.js App, set the application root to `repositories/seragam-app`, retaining the same URL, startup file, and origin. Use the activation command generated for that application root, then run:
+
+```sh
+cd ~/repositories/seragam-app
+bash hosting/node/deploy.sh
+```
+
+If cPanel does not allow editing the existing application root, the application registration must be reconfigured for the new root. Keep the original code folder and database until the new registration is verified. Do not move `~/seragam-data` into the checkout. The database defaults to the account's home directory, so changing the checkout location does not create another database.
