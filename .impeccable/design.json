@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-12T13:13:25.2171019Z",
+  "generatedAt": "2026-10-14T03:11:14.697Z",
   "title": "Design System: Pribadi · Manajemen Seragam",
   "extensions": {
     "colorMeta": {
@@ -16,7 +16,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#f5f7fa"
       },
       "surface": {
         "role": "neutral",
@@ -30,7 +31,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#fff"
       },
       "surface-soft": {
         "role": "neutral",
@@ -44,7 +46,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#f1f5f9"
       },
       "ink": {
         "role": "neutral",
@@ -58,7 +61,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#12233c"
       },
       "muted": {
         "role": "neutral",
@@ -72,7 +76,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#586b83"
       },
       "line": {
         "role": "neutral",
@@ -86,7 +91,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#e0e7ef"
       },
       "accent": {
         "role": "primary",
@@ -100,7 +106,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#0069aa"
       },
       "accent-hover": {
         "role": "primary",
@@ -114,7 +121,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#00558a"
       },
       "accent-soft": {
         "role": "primary",
@@ -128,7 +136,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#eaf5fd"
       },
       "brand-blue": {
         "role": "primary",
@@ -142,7 +151,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#18a8fa"
       },
       "brand-navy": {
         "role": "primary",
@@ -156,7 +166,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#12233c"
       },
       "focus": {
         "role": "primary",
@@ -170,7 +181,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#0879b9"
       },
       "red": {
         "role": "secondary",
@@ -184,7 +196,8 @@
           "oklch(75% 0.08 25)",
           "oklch(87% 0.08 25)",
           "oklch(95% 0.08 25)"
-        ]
+        ],
+        "canonical": "#a63c34"
       },
       "red-soft": {
         "role": "secondary",
@@ -198,7 +211,8 @@
           "oklch(75% 0.08 25)",
           "oklch(87% 0.08 25)",
           "oklch(95% 0.08 25)"
-        ]
+        ],
+        "canonical": "#fff0ed"
       },
       "amber": {
         "role": "secondary",
@@ -212,7 +226,8 @@
           "oklch(75% 0.065 75)",
           "oklch(87% 0.065 75)",
           "oklch(95% 0.065 75)"
-        ]
+        ],
+        "canonical": "#8a5e1a"
       },
       "amber-soft": {
         "role": "secondary",
@@ -226,7 +241,8 @@
           "oklch(75% 0.065 75)",
           "oklch(87% 0.065 75)",
           "oklch(95% 0.065 75)"
-        ]
+        ],
+        "canonical": "#faf2e2"
       },
       "dark-bg": {
         "role": "neutral",
@@ -240,7 +256,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#0c1625"
       },
       "dark-surface": {
         "role": "neutral",
@@ -254,7 +271,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#142237"
       },
       "dark-surface-soft": {
         "role": "neutral",
@@ -268,7 +286,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#1a2c43"
       },
       "dark-ink": {
         "role": "neutral",
@@ -282,7 +301,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#edf4fd"
       },
       "dark-muted": {
         "role": "neutral",
@@ -296,7 +316,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#adbed4"
       },
       "dark-line": {
         "role": "neutral",
@@ -310,7 +331,8 @@
           "oklch(75% 0.012 255)",
           "oklch(87% 0.012 255)",
           "oklch(95% 0.012 255)"
-        ]
+        ],
+        "canonical": "#32465e"
       },
       "dark-accent": {
         "role": "primary",
@@ -324,7 +346,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#7dccfa"
       },
       "dark-accent-hover": {
         "role": "primary",
@@ -338,7 +361,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#ade1ff"
       },
       "dark-accent-soft": {
         "role": "primary",
@@ -352,7 +376,8 @@
           "oklch(75% 0.085 240)",
           "oklch(87% 0.085 240)",
           "oklch(95% 0.085 240)"
-        ]
+        ],
+        "canonical": "#193b59"
       },
       "dark-rail": {
         "role": "neutral",
@@ -366,7 +391,8 @@
           "oklch(75% 0.04 255)",
           "oklch(87% 0.04 255)",
           "oklch(95% 0.04 255)"
-        ]
+        ],
+        "canonical": "#102037"
       },
       "dark-red": {
         "role": "secondary",
@@ -380,7 +406,8 @@
           "oklch(75% 0.08 25)",
           "oklch(87% 0.08 25)",
           "oklch(95% 0.08 25)"
-        ]
+        ],
+        "canonical": "#f3a99f"
       },
       "dark-red-soft": {
         "role": "secondary",
@@ -394,7 +421,8 @@
           "oklch(75% 0.08 25)",
           "oklch(87% 0.08 25)",
           "oklch(95% 0.08 25)"
-        ]
+        ],
+        "canonical": "#462d29"
       },
       "dark-amber": {
         "role": "secondary",
@@ -408,7 +436,8 @@
           "oklch(75% 0.065 75)",
           "oklch(87% 0.065 75)",
           "oklch(95% 0.065 75)"
-        ]
+        ],
+        "canonical": "#e9c58a"
       },
       "dark-amber-soft": {
         "role": "secondary",
@@ -422,58 +451,108 @@
           "oklch(75% 0.065 75)",
           "oklch(87% 0.065 75)",
           "oklch(95% 0.065 75)"
-        ]
+        ],
+        "canonical": "#3a3223"
       }
     },
     "typographyMeta": {
       "headline": {
-        "purpose": "Current destination; 24px on mobile.",
-        "displayName": "Page headline"
+        "displayName": "Page headline",
+        "purpose": "Current destination; 26px on phones, 24px under 400px."
+      },
+      "headline-mobile": {
+        "displayName": "Phone headline",
+        "purpose": "Page headline on screens up to 768px."
       },
       "title": {
-        "purpose": "Panel and matrix hierarchy.",
-        "displayName": "Section title"
+        "displayName": "Section title",
+        "purpose": "Panel, matrix and preview headings."
       },
-      "body": {
-        "purpose": "Compact administration copy.",
-        "displayName": "Body"
-      },
-      "label": {
-        "purpose": "Form and action labels.",
-        "displayName": "Label"
+      "lead-number": {
+        "displayName": "Lead total",
+        "purpose": "Total inventory on the overview; steps down to 38px and 34px on narrower screens."
       },
       "metric": {
-        "purpose": "Tabular inventory totals; 30px on compact layouts.",
-        "displayName": "Stock metric"
+        "displayName": "Stock metric",
+        "purpose": "Other overview totals and the balance result; steps down to 32px and 30px."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "App title, matrix totals, purchase total."
+      },
+      "quantity": {
+        "displayName": "Stock quantity",
+        "purpose": "The number in each size cell; weight 400 for zero."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Page introductions (65ch maximum), field text and form group headings."
+      },
+      "ui": {
+        "displayName": "Interface",
+        "purpose": "Navigation, buttons, tabs, table cells, panel descriptions and form labels."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Table headers, helper text, captions, activity detail."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Level tags, badges, size-cell units and states, footer. Nothing is smaller."
       }
     },
     "shadows": [
       {
-        "purpose": "Transient feedback in light mode.",
-        "value": "0 8px 30px #12233c14",
-        "name": "toast-light"
+        "name": "panel-ambient",
+        "value": "0 2px 8px #12233c04",
+        "purpose": "Near-invisible hairline lift under working panels (dark: 0 2px 8px #000e2710)."
       },
       {
-        "purpose": "Transient feedback in dark mode.",
+        "name": "primary-hover",
+        "value": "0 3px 9px #0069aa18",
+        "purpose": "Faint blue lift under a hovered filled button."
+      },
+      {
+        "name": "zoom-hint",
+        "value": "0 1px 3px #12233c26",
+        "purpose": "Zoom badge on a uniform photo."
+      },
+      {
+        "name": "toast-light",
+        "value": "0 8px 30px #12233c14",
+        "purpose": "Transient feedback in light mode."
+      },
+      {
+        "name": "toast-dark",
         "value": "0 8px 30px #000e2738",
-        "name": "toast-dark"
+        "purpose": "Transient feedback in dark mode."
       }
     ],
     "motion": [
       {
-        "purpose": "Open and close mobile navigation; disabled with reduced motion.",
+        "name": "state-ease",
+        "value": ".18s ease",
+        "purpose": "Background, color, border and transform changes on buttons, rail items, size cells and links."
+      },
+      {
+        "name": "heading-arrive",
+        "value": ".22s ease-out; translateY(4px) to none, opacity .9 to 1",
+        "purpose": "Page heading on each destination."
+      },
+      {
+        "name": "drawer",
         "value": "transform .2s ease",
-        "name": "drawer"
+        "purpose": "Open and close mobile navigation."
       },
       {
-        "purpose": "Primary and secondary pressed feedback.",
+        "name": "button-press",
         "value": "translateY(1px)",
-        "name": "button-press"
+        "purpose": "Primary and secondary pressed feedback."
       },
       {
-        "purpose": "Apply under prefers-reduced-motion: reduce.",
-        "value": "transition:none; animation:none; scroll-behavior:auto",
-        "name": "reduced-motion"
+        "name": "reduced-motion",
+        "value": "transition:none; animation:none",
+        "purpose": "Apply under prefers-reduced-motion: reduce."
       }
     ],
     "breakpoints": [
@@ -492,6 +571,14 @@
       {
         "name": "narrow-form",
         "value": "400px"
+      },
+      {
+        "name": "short-screen",
+        "value": "max-height 560px"
+      },
+      {
+        "name": "touch",
+        "value": "pointer: coarse"
       }
     ]
   },
@@ -500,83 +587,93 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Save or begin the principal task.",
+      "description": "Filled blue action; one per task area.",
       "html": "<button class=\"ds-primary\">Catat stok</button>",
-      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 17px;background:var(--accent,#0069aa);color:var(--surface,#fff);border:0;border-radius:var(--control-radius,8px);font:600 12px Inter,Arial,sans-serif;cursor:pointer}.ds-primary:hover{background:var(--accent-hover,#00558a)}.ds-primary:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}.ds-primary:active{transform:translateY(1px)}.ds-primary:disabled{opacity:.5;cursor:not-allowed}"
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 17px;background:var(--accent,#0069aa);color:var(--surface,#fff);border:0;border-radius:var(--control-radius,10px);font:600 .8125rem var(--font-app,'Geist',Arial,sans-serif);cursor:pointer;transition:background-color .18s ease,box-shadow .18s ease,transform .18s ease}.ds-primary:hover{background:var(--accent-hover,#00558a);box-shadow:0 3px 9px #0069aa18}.ds-primary:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}.ds-primary:active{transform:translateY(1px)}.ds-primary:disabled{opacity:.5;cursor:not-allowed}"
     },
     {
       "name": "Secondary Button",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "A supporting action within the same workflow.",
+      "description": "White bordered action beside or below a primary one.",
       "html": "<button class=\"ds-secondary\">Ekspor Excel</button>",
-      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 13px;background:var(--surface,#fff);color:var(--ink,#12233c);border:1px solid var(--line,#dfe6ef);border-radius:var(--control-radius,8px);font:500 12px Inter,Arial,sans-serif;cursor:pointer}.ds-secondary:hover{background:var(--surface-soft,#f4f7fc);border-color:var(--muted,#586b83)}.ds-secondary:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}.ds-secondary:active{transform:translateY(1px)}.ds-secondary:disabled{opacity:.5;cursor:not-allowed}"
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 17px;background:var(--surface,#fff);color:var(--ink,#12233c);border:1px solid var(--line,#e0e7ef);border-radius:var(--control-radius,10px);font:500 .8125rem var(--font-app,'Geist',Arial,sans-serif);cursor:pointer;transition:background-color .18s ease,border-color .18s ease,transform .18s ease}.ds-secondary:hover{background:var(--surface-soft,#f1f5f9);border-color:var(--muted,#586b83)}.ds-secondary:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}.ds-secondary:active{transform:translateY(1px)}.ds-secondary:disabled{opacity:.5;cursor:not-allowed}"
     },
     {
       "name": "Text Action",
       "kind": "button",
       "refersTo": "text-action",
-      "description": "A compact route to supporting stock detail.",
+      "description": "Blue link-style action that leads somewhere, never a filled button.",
       "html": "<button class=\"ds-text-action\">Data stok <svg aria-hidden=\"true\" width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></button>",
-      "css": ".ds-text-action{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--accent,#0069aa);border:0;padding:5px 0;font:600 12px Inter,Arial,sans-serif;cursor:pointer}.ds-text-action:hover{text-decoration:underline;text-underline-offset:4px}.ds-text-action:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
+      "css": ".ds-text-action{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--accent,#0069aa);border:0;padding:5px 0;font:600 .8125rem var(--font-app,'Geist',Arial,sans-serif);cursor:pointer}.ds-text-action:hover{text-decoration:underline;text-underline-offset:4px}.ds-text-action:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
     },
     {
       "name": "Search Field",
       "kind": "input",
       "refersTo": "input",
-      "description": "Search by uniform name before selecting a size.",
+      "description": "Inline-icon search with a focus-within ring.",
       "html": "<label class=\"ds-search\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input type=\"search\" aria-label=\"Cari nama seragam\" placeholder=\"Cari nama seragam…\"/></label>",
-      "css": ".ds-search{display:flex;align-items:center;gap:10px;min-height:42px;max-width:430px;padding:0 11px;background:var(--surface,#fff);color:var(--muted,#586b83);border:1px solid var(--line,#dfe6ef);border-radius:var(--control-radius,8px)}.ds-search input{width:100%;min-width:0;border:0;outline:none;background:transparent;color:var(--ink,#12233c);padding:9px 0;font:400 12px Inter,Arial,sans-serif;caret-color:var(--accent,#0069aa)}.ds-search input::placeholder{color:var(--muted,#586b83)}.ds-search:focus-within{outline:2px solid var(--focus,#0879b9);outline-offset:1px}"
+      "css": ".ds-search{display:flex;align-items:center;gap:10px;min-height:48px;max-width:430px;padding:0 11px;background:var(--surface,#fff);color:var(--muted,#586b83);border:1px solid var(--line,#e0e7ef);border-radius:var(--control-radius,10px)}.ds-search input{width:100%;min-width:0;border:0;outline:none;background:transparent;color:var(--ink,#12233c);padding:12px 0;font:400 .875rem var(--font-app,'Geist',Arial,sans-serif);caret-color:var(--accent,#0069aa)}.ds-search input::placeholder{color:var(--muted,#586b83)}.ds-search:focus-within{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
     },
     {
       "name": "Navigation Destination",
       "kind": "nav",
       "refersTo": "navigation-active",
-      "description": "Active destination in the white rail or mobile drawer.",
-      "html": "<nav class=\"ds-nav\" aria-label=\"Navigasi utama\"><button aria-current=\"page\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg>Data stok<span class=\"ds-nav-marker\"></span></button></nav>",
-      "css": ".ds-nav{max-width:208px;background:var(--surface,#fff)}.ds-nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:12px;text-align:left;background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa);border:0;border-radius:7px;font:700 12px Inter,Arial,sans-serif;cursor:pointer}.ds-nav button:hover{background:var(--surface-soft,#f4f7fc)}.ds-nav button:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}.ds-nav-marker{width:6px;height:6px;margin-left:auto;border-radius:50%;background:var(--accent,#0069aa)}"
+      "description": "Active rail destination: pale blue, blue text, weight 600, no marker dot.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navigasi utama\"><button aria-current=\"page\"><svg aria-hidden=\"true\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg>Data stok</button></nav>",
+      "css": ".ds-nav{max-width:212px;background:var(--rail,#fff)}.ds-nav button{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:13px 14px;text-align:left;background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa);border:0;border-radius:10px;font:600 .8125rem var(--font-app,'Geist',Arial,sans-serif);line-height:1.4;cursor:pointer}.ds-nav button:hover{background:var(--surface-soft,#f1f5f9)}.ds-nav button:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
     },
     {
       "name": "Valid Status",
       "kind": "chip",
       "refersTo": "status-valid",
-      "description": "Explicit validation result for an import preview.",
+      "description": "Tag with an explicit word; colour never stands alone.",
       "html": "<span class=\"ds-status\">Valid</span>",
-      "css": ".ds-status{display:inline-flex;align-items:center;padding:4px 7px;border-radius:5px;background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa);font:400 10px Inter,Arial,sans-serif;white-space:nowrap}"
+      "css": ".ds-status{display:inline-flex;align-items:center;padding:4px 7px;border-radius:6px;background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa);font:500 .6875rem var(--font-app,'Geist',Arial,sans-serif);white-space:nowrap}"
     },
     {
       "name": "Working Panel",
       "kind": "card",
       "refersTo": "panel",
-      "description": "Flat white container for a single administrative task.",
+      "description": "White bordered surface with a hairline ambient shadow.",
       "html": "<section class=\"ds-panel\"><h2>Peringatan stok menipis</h2><p>Batas yang sama digunakan di ringkasan dan matriks stok.</p></section>",
-      "css": ".ds-panel{padding:22px;border:1px solid var(--line,#dfe6ef);border-radius:var(--radius,14px);background:var(--surface,#fff);color:var(--ink,#12233c);font:400 14px/1.5 Inter,Arial,sans-serif}.ds-panel h2{margin:0;font-size:15px;font-weight:600;line-height:1.4;letter-spacing:-.015em}.ds-panel p{margin:5px 0 0;font-size:12px;color:var(--muted,#586b83)}"
+      "css": ".ds-panel{padding:22px;border:1px solid var(--line,#e0e7ef);border-radius:var(--radius,16px);background:var(--surface,#fff);color:var(--ink,#12233c);box-shadow:0 2px 8px #12233c04;font:400 .875rem/1.55 var(--font-app,'Geist',Arial,sans-serif)}.ds-panel h2{margin:0;font-size:1.125rem;font-weight:600;line-height:1.4;letter-spacing:-.02em}.ds-panel p{margin:6px 0 0;font-size:.8125rem;line-height:1.6;color:var(--muted,#586b83)}"
     },
     {
       "name": "Selected Size Cell",
       "kind": "custom",
       "refersTo": "stock-cell",
-      "description": "Readable stock quantity for the selected size, with exact-cell entry.",
+      "description": "Size column highlighted after a size is chosen; quantity plus a unit or state word.",
       "html": "<div class=\"ds-size\"><div class=\"ds-size-header\">9</div><button aria-label=\"Polo Shirt MERAH Panjang, Baru ukuran 9: 12 pcs. Catat perubahan.\"><strong>12</strong><span>pcs</span></button></div>",
-      "css": ".ds-size{width:74px;background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa);font-family:Inter,Arial,sans-serif}.ds-size-header{padding:8px 0;text-align:center;border-block:1px solid var(--line,#dfe6ef);font-size:11px}.ds-size button{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:64px;padding:8px 2px;border:0;background:transparent;color:inherit;cursor:pointer}.ds-size strong{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}.ds-size span{font-size:10px;margin-top:3px;color:var(--muted,#586b83)}.ds-size button:hover{background:var(--accent-soft,#eaf5fd)}.ds-size button:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
+      "css": ".ds-size{width:74px;background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa);font-family:var(--font-app,'Geist',Arial,sans-serif)}.ds-size-header{padding:8px 0;text-align:center;border-block:1px solid var(--line,#e0e7ef);font-size:.75rem;font-weight:500}.ds-size button{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:64px;padding:8px 2px;border:0;background:transparent;color:inherit;cursor:pointer}.ds-size strong{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums}.ds-size span{font-size:.6875rem;margin-top:3px;color:var(--muted,#586b83)}.ds-size button:hover{background:var(--accent-soft,#eaf5fd)}.ds-size button:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
+    },
+    {
+      "name": "Low Stock Cell",
+      "kind": "custom",
+      "refersTo": "stock-cell",
+      "description": "A cell below the limit: pale red surface, red quantity and the word Menipis.",
+      "html": "<div class=\"ds-low\"><button aria-label=\"Rok SD, ukuran 11-12: 2 pcs, menipis\"><strong>2</strong><span>Menipis</span></button></div>",
+      "css": ".ds-low{width:74px;font-family:var(--font-app,'Geist',Arial,sans-serif)}.ds-low button{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:64px;padding:8px 2px;border:0;background:var(--red-soft,#fff0ed);color:var(--red,#a63c34);cursor:pointer}.ds-low strong{font-size:1rem;font-weight:600;font-variant-numeric:tabular-nums}.ds-low span{font-size:.6875rem;margin-top:3px}.ds-low button:hover{background:var(--accent-soft,#eaf5fd);color:var(--accent,#0069aa)}.ds-low button:focus-visible{outline:3px solid var(--focus,#0879b9);outline-offset:3px}"
     },
     {
       "name": "File Selection",
       "kind": "custom",
-      "description": "Native file input with a consistent Indonesian blue choice control.",
+      "refersTo": "upload-area",
+      "description": "Dashed upload area with a full-area native file input beneath a blue choice control.",
       "html": "<label class=\"ds-upload\"><svg aria-hidden=\"true\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7-5-5-5 5m5-5v12\"/></svg><strong>Pilih berkas stok</strong><span>Excel .xlsx, CSV, atau JSON · maksimal 5 MB</span><span class=\"ds-upload-choice\" aria-hidden=\"true\">Pilih berkas</span><input type=\"file\" aria-label=\"Pilih berkas stok\" accept=\".xlsx,.csv,.json\"/></label>",
-      "css": ".ds-upload{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;padding:28px 18px;border:1px dashed var(--line,#dfe6ef);border-radius:9px;background:var(--surface-soft,#f4f7fc);color:var(--accent,#0069aa);font-family:Inter,Arial,sans-serif;cursor:pointer}.ds-upload strong{font-size:13px;max-width:100%;overflow-wrap:anywhere;text-align:center}.ds-upload>span{font-size:11px;color:var(--muted,#586b83)}.ds-upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.ds-upload .ds-upload-choice{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 17px;background:var(--accent,#0069aa);color:var(--surface,#fff);border-radius:var(--control-radius,8px);font-weight:600;font-size:12px}.ds-upload:hover .ds-upload-choice{background:var(--accent-hover,#00558a)}.ds-upload:focus-within{outline:3px solid var(--focus,#0879b9)}.ds-upload.ds-busy{opacity:.65;cursor:wait}.ds-upload.ds-busy input{cursor:wait}"
+      "css": ".ds-upload{position:relative;display:flex;flex-direction:column;align-items:center;gap:11px;padding:28px 18px;border:1px dashed var(--line,#dfe6ef);border-radius:9px;background:var(--surface-soft,#f4f7fc);color:var(--accent,#0069aa);font-family:var(--font-app,'Geist',Arial,sans-serif);cursor:pointer}.ds-upload strong{font-size:.8125rem;max-width:100%;overflow-wrap:anywhere;text-align:center}.ds-upload>span{font-size:.6875rem;color:var(--muted,#586b83)}.ds-upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.ds-upload .ds-upload-choice{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 17px;background:var(--accent,#0069aa);color:var(--surface,#fff);border-radius:var(--control-radius,8px);font-weight:600;font-size:12px}.ds-upload:hover .ds-upload-choice{background:var(--accent-hover,#00558a)}.ds-upload:focus-within{outline:3px solid var(--focus,#0879b9)}.ds-upload.ds-busy{opacity:.65;cursor:wait}.ds-upload.ds-busy input{cursor:wait}"
     }
   ],
   "narrative": {
     "northStar": "The School Stock Workspace",
-    "overview": "Pribadi’s school identity gives daily stock administration a clear, coherent home. White navigation and working surfaces carry navy text, while blue identifies actions, selected sizes, and active destinations. The official school logo sits directly on the sidebar with no colored box; retain its original red detail and proportions.\n\nThe workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, settings, and the optional navy dark theme. Temporary shared mode hides application sign-in and officer management; the rail identifies Mode bersama instead of an officer or role. Preserved account screens remain available when account enforcement is restored.",
+    "overview": "Pribadi’s school identity gives daily stock administration a clear, coherent home. White navigation and working surfaces carry navy text, while blue identifies actions, selected sizes, and active destinations. The official school logo sits directly on the sidebar with no colored box; retain its original red detail and proportions.\n\nThe workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, settings, and the optional navy dark theme. Temporary shared mode hides application sign-in and officer management; the rail omits technical connection and shared-mode labels. Preserved account screens remain available when account enforcement is restored.",
     "keyCharacteristics": [
       "White working surfaces and navy hierarchy",
       "Blue actions, selection, and focus",
-      "Self-hosted Inter and tabular quantities",
+      "Self-hosted Geist and tabular quantities",
       "Horizontal size matrices and exact-cell movement handoff",
-      "Name and total kept visible on mobile"
+      "Name and total kept visible on mobile",
+      "44px touch targets, and a navigation rail that scrolls on short screens"
     ],
     "rules": [
       {
@@ -601,21 +698,25 @@
       }
     ],
     "dos": [
-      "**Do** preserve the official Pribadi logo and use white, navy, and school blue across all screens.",
-      "**Do** use Action Blue for legible actions and School Blue for identity accents.",
-      "**Do** keep quantities complete, aligned with tabular figures, and paired with size context.",
-      "**Do** preserve selected-size centering and exact-cell movement handoff.",
-      "**Do** keep uniform names and totals visible on mobile.",
-      "**Do** pair stock and validation colors with explicit Indonesian labels.",
-      "**Do** respect dark-theme role mapping and reduced-motion preference."
+      "Do preserve the official Pribadi logo and use white, navy, and school blue across all screens.",
+      "Do use Action Blue for legible actions and School Blue for identity accents.",
+      "Do keep quantities complete, aligned with tabular figures, and paired with size context.",
+      "Do preserve selected-size centering and exact-cell movement handoff.",
+      "Do keep uniform names and totals visible on mobile.",
+      "Do pair stock and validation colors with explicit Indonesian labels.",
+      "Do respect dark-theme role mapping and reduced-motion preference.",
+      "Do give every piece of text a role from the type scale, and keep touch targets at 44px."
     ],
     "donts": [
-      "**Don't** introduce an unrelated brand palette or recolor the official logo.",
-      "**Don't** replace horizontal size matrices with disconnected cards.",
-      "**Don't** hide or truncate quantities or the mobile overview total.",
-      "**Don't** combine old and new size identity in a stock cell.",
-      "**Don't** add heavy shadows to ordinary working panels.",
-      "**Don't** use color alone to indicate low stock, empty stock, or validation."
+      "Don't introduce an unrelated brand palette or recolor the official logo.",
+      "Don't replace horizontal size matrices with disconnected cards.",
+      "Don't hide or truncate quantities or the mobile overview total.",
+      "Don't combine old and new size identity in a stock cell.",
+      "Don't add heavy shadows to ordinary working panels.",
+      "Don't use color alone to indicate low stock, empty stock, or validation.",
+      "Don't set text below 11px or outside the type scale, or shrink controls on small screens.",
+      "Don't let a short screen hide navigation: the rail scrolls instead.",
+      "Don't use `content-visibility` on size matrices; selected-size centering needs every scroller measured."
     ]
   }
 }

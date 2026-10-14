@@ -6,6 +6,8 @@ import {join} from 'node:path';
 import {build} from 'esbuild';
 import {openDatabase} from '../server/database.mjs';
 import {startServer} from '../server/index.mjs';
+import {get as httpGet} from 'node:http';
+import {gunzipSync} from 'node:zlib';
 
 const dir=mkdtempSync(join(tmpdir(),'seragam-server-'));
 test.after(()=>rmSync(dir,{recursive:true,force:true}));
@@ -43,6 +45,23 @@ test('Node server serves the page and the inventory API',async()=>{
   const saved=await post({origin});assert.equal(saved.status,200,await saved.clone().text());
   const state=await (await fetch(origin+'/api/state')).json();
   assert.equal(state.stock['13|Baru|9'].quantity,2);
+ }finally{await new Promise(done=>server.close(done));}
+});
+
+test('the stock snapshot is gzip-compressed for browsers that accept it',async()=>{
+ const publicRoot=join(dir,'gz-public'),apiFile=join(dir,'api-gz.mjs');
+ mkdirSync(publicRoot);writeFileSync(join(publicRoot,'index.html'),'<html></html>');
+ await build({entryPoints:['server/api.ts'],outfile:apiFile,bundle:true,format:'esm',platform:'node',logLevel:'silent'});
+ const server=await startServer({port:0,host:'127.0.0.1',databasePath:join(dir,'gz.sqlite'),apiFile,publicRoot});
+ const origin=`http://127.0.0.1:${server.address().port}`;
+ try{
+  // fetch() hides the Content-Encoding header after decoding, so ask over plain http to see what the server really sends.
+  const raw=encoding=>new Promise((resolve,reject)=>httpGet(origin+'/api/state',{headers:{'accept-encoding':encoding}},res=>{const parts=[];res.on('data',c=>parts.push(c));res.on('end',()=>resolve({headers:res.headers,body:Buffer.concat(parts)}));}).on('error',reject));
+  const zipped=await raw('gzip'),plain=await raw('identity');
+  assert.equal(zipped.headers['content-encoding'],'gzip');assert.equal(zipped.headers.vary,'Accept-Encoding');
+  assert.equal(plain.headers['content-encoding'],undefined);
+  assert.ok(zipped.body.length<plain.body.length/4,'the snapshot should shrink a lot');
+  assert.deepEqual(JSON.parse(gunzipSync(zipped.body).toString()),JSON.parse(plain.body.toString()),'both encodings must carry the same snapshot');
  }finally{await new Promise(done=>server.close(done));}
 });
 

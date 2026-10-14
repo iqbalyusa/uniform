@@ -13,7 +13,9 @@ const client=await build({entryPoints:['app/client.tsx'],outdir:join(publicDir,'
 const outputs=Object.keys(client.metafile.outputs),main=outputs.find(p=>client.metafile.outputs[p].entryPoint==='app/client.tsx'&&p.endsWith('.js')),css=outputs.find(p=>p.endsWith('.css'));
 if(!main||!css)throw Error('Browser entry or stylesheet missing');
 const name=p=>p.split('/').pop();
-await writeFile(join(publicDir,'index.html'),`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#12233c"><title>Pribadi · Manajemen Seragam</title><meta name="description" content="Stok seragam bersama untuk SD, SMP, dan SMA Pribadi."><link rel="icon" href="/favicon.png" type="image/png"><link rel="stylesheet" href="/assets/${name(css)}"></head><body><div id="app"></div><script type="module" src="/assets/${name(main)}"></script></body></html>`);
+// Fonts are only discovered after the stylesheet arrives; preloading the two weights every screen uses saves that round trip.
+const fonts=outputs.filter(p=>/geist-latin-(400|600)-normal-[A-Z0-9]+.woff2$/.test(p)).map(p=>`<link rel="preload" href="/assets/${name(p)}" as="font" type="font/woff2" crossorigin>`).join('');
+await writeFile(join(publicDir,'index.html'),`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#12233c"><title>Pribadi · Manajemen Seragam</title><meta name="description" content="Stok seragam bersama untuk SD, SMP, dan SMA Pribadi."><link rel="icon" href="/favicon.png" type="image/png">${fonts}<link rel="stylesheet" href="/assets/${name(css)}"></head><body><div id="app"></div><script type="module" src="/assets/${name(main)}"></script></body></html>`);
 await writeFile(manifest,JSON.stringify(outputs.map(name)));
 for(const [file,body] of previous)await access(join(assetsDir,file)).catch(()=>writeFile(join(assetsDir,file),body));
 await build({entryPoints:['server/api.ts'],outfile:join(dist,'api.mjs'),bundle:true,format:'esm',platform:'node',target:'node22',minify:true,logLevel:'info'});

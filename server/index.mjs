@@ -41,7 +41,10 @@ export async function startServer({port=Number(process.env.PORT||3000),host=proc
     if(length>maxBody){res.writeHead(413,{...security,'Content-Type':'application/json'});res.end(JSON.stringify({error:'Data terlalu besar.'}));return;}
     const request=new Request(url,{method,headers,...(method==='POST'?{body:Buffer.concat(chunks)}:{})});
     const response=await (method==='GET'?api.GET(request):api.POST(request));
-    res.writeHead(response.status,{...security,...Object.fromEntries(response.headers)});res.end(Buffer.from(await response.arrayBuffer()));return;
+    let payload=Buffer.from(await response.arrayBuffer());const reply={...security,...Object.fromEntries(response.headers),Vary:'Accept-Encoding'};
+    // The state snapshot is mostly repeated JSON keys: gzip shrinks it about 13x, and every open page asks for it every 15 seconds.
+    if(payload.length>1024&&/\bgzip\b/.test(req.headers['accept-encoding']||'')&&String(reply['content-type']||'').includes('json')){payload=gzipSync(payload);reply['Content-Encoding']='gzip';delete reply['content-length'];}
+    res.writeHead(response.status,reply);res.end(payload);return;
    }
    if(!['GET','HEAD'].includes(req.method||'GET')){res.writeHead(405,{...security,Allow:'GET, HEAD'});res.end();return;}
    const pathname=decodeURIComponent(url.pathname),file=resolve(publicRoot,'.'+(pathname==='/'?'/index.html':pathname));
