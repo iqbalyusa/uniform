@@ -29,6 +29,13 @@
       "when": 1791987124988,
       "tag": "0003_history_edits",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1791987869523,
+      "tag": "0004_allow_history_delete",
+      "breakpoints": true
     }
   ]
 }

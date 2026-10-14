@@ -78,6 +78,23 @@ test('history details can be edited with a trail; quantities, stock and other en
  assert.equal((await post('history-edit',{id:setting.id,editedAt:null,date:'2026-01-01',note:'x'})).status,400);
  assert.throws(()=>sqlite.exec("UPDATE history SET delta=99,edited_at='x',edit_log='[1,2,3]' WHERE action='Keluar'"),/audit is immutable/);
  assert.throws(()=>sqlite.exec("UPDATE history SET note='quiet' WHERE action='Keluar'"),/audit is immutable/,'an edit without a trail entry is refused');
- assert.throws(()=>sqlite.exec("DELETE FROM history"),/audit is immutable/);
  const state=await (await get('state')).json();assert.ok(state.history.some(h=>h.edited_at));sqlite.close();
+});
+test('deleting history needs HAPUS, undoes the stock change, and refuses to go below zero',async()=>{
+ const {sqlite,get,post}=await fixture();const stock=()=>sqlite.prepare("SELECT quantity FROM stock WHERE key='13|Baru|9'").get().quantity;
+ const issue=move({action:'Keluar',quantity:3,studentName:'Budi',studentClass:'7A'});
+ assert.equal((await post('movement',issue)).status,200);assert.equal(stock(),7);
+ assert.equal((await post('history-delete',{id:issue.id,confirm:'hapus aja'})).status,400);
+ assert.equal((await post('history-delete',{id:issue.id})).status,400);
+ assert.equal((await post('history-delete',{id:issue.id,confirm:'hapus'})).status,200,'case does not matter');
+ assert.equal(stock(),10,'deleting a stock-out returns the pieces');
+ assert.equal(sqlite.prepare('SELECT COUNT(*) AS n FROM history').get().n,0,'no trace is kept');
+ assert.equal((await post('history-delete',{id:issue.id,confirm:'HAPUS'})).status,404);
+ const receipt=move({revision:2,quantity:5});assert.equal((await post('movement',receipt)).status,200);assert.equal(stock(),15);
+ const out=move({action:'Keluar',revision:3,quantity:12,studentName:'Ani',studentClass:'8B'});assert.equal((await post('movement',out)).status,200);assert.equal(stock(),3);
+ assert.equal((await post('history-delete',{id:receipt.id,confirm:'HAPUS'})).status,409,'removing the 5 received would leave -2');
+ assert.equal(stock(),3);assert.equal(sqlite.prepare('SELECT COUNT(*) AS n FROM history').get().n,2,'a refused delete changes nothing');
+ assert.equal((await post('settings',{lowLimit:7})).status,200);const setting=sqlite.prepare("SELECT id FROM history WHERE action='Pengaturan'").get();
+ assert.equal((await post('history-delete',{id:setting.id,confirm:'HAPUS'})).status,200);assert.equal(stock(),3,'non-stock entries leave stock alone');
+ assert.equal((await post('history-delete',{id:out.id,confirm:'HAPUS'},'https://evil.example')).status,403);sqlite.close();
 });

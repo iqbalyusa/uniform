@@ -104,6 +104,10 @@ table,.metrics,.stock-preview,.purchase-review,.pagination,.matrix-total,.number
 .secondary{background:var(--color-surface);border-color:var(--color-border-strong);color:var(--color-foreground);font-weight:600}
 .secondary:hover:not(:disabled){background:var(--color-surface-page);border-color:var(--color-muted-foreground)}
 .secondary:disabled,.icon-button:disabled{color:var(--color-muted-foreground)}
+.danger{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px;border:1px solid transparent;border-radius:var(--radius-md);background:var(--color-destructive);color:var(--color-on-primary);font-size:var(--fs-ui);font-weight:600;line-height:1.2;white-space:nowrap;transition:background-color var(--motion-fast) ease}
+.danger:hover:not(:disabled){background:color-mix(in srgb,var(--color-destructive) 80%,var(--color-foreground))}
+.text-button.danger-text{color:var(--color-destructive);margin-left:12px}
+.text-button.danger-text:hover:not(:disabled){color:color-mix(in srgb,var(--color-destructive) 80%,var(--color-foreground))}
 .text-button{background:transparent;color:var(--color-action);padding:6px 0;font-size:var(--fs-ui);font-weight:600}
 .text-button:hover:not(:disabled){color:var(--color-action-hover);text-decoration:underline;text-underline-offset:4px}
 .icon-button{background:transparent;color:var(--color-muted-foreground);border-radius:var(--radius-md);padding:8px;min-width:40px;min-height:40px}

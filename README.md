@@ -74,7 +74,7 @@ Pengelolaan akun aplikasi **dinonaktifkan sementara** melalui `accountsEnabled =
 - Penerimaan baru hanya ke ukuran Baru. Pengeluaran dapat memakai stok Lama hingga habis.
 - Pengeluaran wajib memiliki nama siswa dan kelas. Penyesuaian wajib memiliki alasan.
 - Jumlah harus bilangan bulat; stok tidak boleh negatif. Permintaan berulang memakai ID yang sama untuk menghindari pencatatan ganda. Perubahan bersamaan diperiksa secara atomik di database.
-- Riwayat baru pada mode bersama memakai label **Pengunjung tanpa akun**, waktu, dan nilai sebelum/sesudah. Riwayat lama mempertahankan nama asli. Riwayat tidak dapat diubah atau dihapus melalui aplikasi.
+- Riwayat baru pada mode bersama memakai label **Pengunjung tanpa akun**, waktu, dan nilai sebelum/sesudah. Riwayat lama mempertahankan nama asli. Detail riwayat (tanggal, staff, siswa, kelas, catatan) dapat diubah dengan jejak "Diubah". Riwayat dapat dihapus setelah mengetik HAPUS; menghapus stok masuk/keluar/penyesuaian mengembalikan jumlah stoknya.
 - Stok kosong ditampilkan terpisah dari stok menipis. Batas menipis dapat diatur, awalnya 5 pcs.
 
 ## Impor, ekspor, dan cadangan

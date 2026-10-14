@@ -102,6 +102,19 @@ export async function editHistory(member:Member,data:any){
  if(result.slice(0,rows.length).some(r=>!r.meta.changes))throw new ApiError('Aktivitas ini baru saja diubah. Muat ulang lalu coba kembali.',409);
  return {edited:rows.length};
 }
+// Deleting removes the entry without a trace (owner's choice) after the user types HAPUS. A stock movement is undone:
+// its change is subtracted from the current balance, and the stock guard refuses a delete that would go below zero.
+export async function deleteHistory(member:Member,data:any){
+ inventoryEditor(member);const db=database();const id=required(data.id,'ID aktivitas',200);
+ if(String(data.confirm??'').trim().toUpperCase()!=='HAPUS')throw new ApiError('Ketik HAPUS untuk mengonfirmasi penghapusan.');
+ const row=await db.prepare('SELECT * FROM history WHERE id=?').bind(id).first<any>();
+ if(!row)throw new ApiError('Aktivitas tidak ditemukan atau sudah dihapus.',404);
+ const undo=row.key&&row.delta!==null&&editableActions.includes(row.action);
+ const statements=[...(undo?[db.prepare('UPDATE stock SET quantity=quantity-?,revision=revision+1,last_change=? WHERE key=?').bind(row.delta,'delete:'+id,row.key)]:[]),db.prepare('DELETE FROM history WHERE id=?').bind(id),db.prepare('UPDATE settings SET revision=revision+1 WHERE id=1')];
+ try{const result=await db.batch(statements);if(!result[undo?1:0].meta.changes)throw new ApiError('Aktivitas tidak ditemukan atau sudah dihapus.',404);}
+ catch(error){if(String(error).includes('invalid stock quantity'))throw new ApiError('Stok akan menjadi minus jika entri ini dihapus. Periksa stok terlebih dahulu.',409);throw error;}
+ return {deleted:1,stockChange:undo?-row.delta:0};
+}
 export async function changeMember(member:Member,data:any){
  if(!accountsEnabled)throw new ApiError('Pengelolaan akun dinonaktifkan sementara.',404);
  admin(member);const db=database();const email=required(data.email,'Email',254).toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new ApiError('Alamat email tidak valid.');const name=required(data.name,'Nama petugas',100);if(!['admin','staff'].includes(data.role))throw new ApiError('Peran tidak valid.');const active=data.active===0?0:1;const existing=await db.prepare('SELECT * FROM members WHERE email=?').bind(email).first<Member>();if(existing?.id===member.id&&(!active||data.role!=='admin'))throw new ApiError('Anda tidak dapat mencabut akses administrator sendiri.');const id=existing?.id??crypto.randomUUID();
