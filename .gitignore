@@ -65,5 +65,7 @@ next-env.d.ts
 *.tsbuildinfo
 /inventory-exports/
 /backups/
+# Full-size uniform photos; scripts/uniform-images.py commits small copies to app/assets/uniforms.
+/assets/
 
 /tmp/

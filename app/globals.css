@@ -223,3 +223,28 @@ main#main{max-width:1480px;padding:36px 36px 24px}
 @media(max-width:768px){.app-shell{grid-template-columns:1fr}.sidebar{width:248px;padding:24px 18px}.brand{padding:4px 14px 28px}.brand-context{font-size:25px}.topbar{height:64px;padding-inline:16px}.breadcrumb{font-size:12px;gap:8px}.topbar-actions{gap:2px}.topbar-actions .icon-button{min-width:40px;min-height:40px}.connection{font-size:10px}main#main{padding:28px 16px 20px}.page-heading{gap:12px;margin-bottom:24px}.page-heading h1{font-size:27px}.page-heading p{font-size:13px;margin-top:8px}.page-heading>.primary{min-height:44px;padding:10px 12px;font-size:12px}.dashboard-lookup{gap:10px;flex-wrap:wrap}.dashboard-lookup .search-field{min-width:0;flex:1}.dashboard-lookup input{font-size:16px}.metrics{grid-template-columns:1fr 1fr;margin-bottom:24px}.metrics>div,.metrics>button{padding:20px 16px}.metrics strong,.metrics .metric-total strong{font-size:34px}.metrics span,.metrics p{font-size:11px}.metrics strong small{font-size:11px}.dashboard-grid{gap:20px}.overview td{font-size:12px;padding-block:16px}.overview .panel-title{gap:12px}.panel-title h2{font-size:16px}.panel-title p{font-size:12px}.inventory-controls{padding:18px 16px}.tabs button{font-size:11px;padding-inline:10px}.select-filters select{font-size:12px;min-height:44px}.matrix-heading{padding:0 16px 18px;gap:14px}.matrix-heading h2{font-size:16px}.matrix-heading p{font-size:11px}.movement-panel{padding:20px 18px}.segmented button{font-size:11px;gap:5px}.field{font-size:13px}.field input,.field select,.field textarea{font-size:16px;min-height:46px}.purchase-items>.secondary{font-size:13px}.stock-preview h2{font-size:18px}.history-controls input,.history-controls select,.search-field input{font-size:16px}.workspace-footer{font-size:10px;gap:6px}.stock-alert{padding:18px}.icon-button{min-height:44px;min-width:44px}}
 @media(max-width:400px){.dashboard-lookup .search-field{flex-basis:100%}.dashboard-lookup>.secondary{width:100%}.page-heading h1{font-size:25px}.page-heading>.primary{font-size:11px;padding-inline:10px}}
 @media(prefers-reduced-motion:reduce){.page-heading{animation:none}.primary,.secondary,.icon-button,.text-button,.sidebar nav button,.stock-cell,.item-link{transition:none}}
+/* Uniform photos (scripts/uniform-images.py): one 4:5 frame everywhere, fixed size so lazy images never shift the layout. */
+.uniform-photo{position:relative;flex-shrink:0;display:inline-grid;place-items:center;aspect-ratio:4/5;padding:0;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:var(--surface-soft);color:var(--muted)}
+.uniform-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.uniform-photo.sm{width:36px;border-radius:7px}
+.uniform-photo.md{width:64px;border-radius:10px}
+.uniform-photo.lg{width:120px;border-radius:12px;margin-bottom:18px}
+button.uniform-photo{cursor:zoom-in;transition:border-color .18s ease,transform .18s ease}
+button.uniform-photo:hover{border-color:var(--accent)}
+button.uniform-photo:active{transform:translateY(1px)}
+.zoom-hint{position:absolute;right:4px;bottom:4px;display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:var(--surface);color:var(--ink);box-shadow:0 1px 3px #12233c26}
+.item-link.with-photo{display:inline-flex;align-items:center;gap:12px}
+.overview td{padding-block:10px}
+.matrix-title{display:flex;align-items:center;gap:16px;min-width:0}
+.select-with-photo{display:flex;align-items:center;gap:10px;min-width:0}
+.select-with-photo select{flex:1;min-width:0}
+.purchase-review li.with-photo{display:flex;align-items:flex-start;gap:12px}
+.review-body{flex:1;min-width:0}
+.purchase-review .review-body>p{color:var(--muted);font-size:12px;margin:5px 0 10px}
+.photo-dialog{width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--ink)}
+.photo-dialog::backdrop{background:#0b1526b8}
+.photo-dialog img{display:block;width:100%;height:auto;max-height:calc(100dvh - 110px);aspect-ratio:4/5;object-fit:contain;background:var(--surface-soft)}
+.photo-dialog-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 8px 8px 18px;font-size:14px}
+.photo-dialog-bar strong{font-weight:600}
+.photo-dialog-bar .icon-button{min-width:44px;min-height:44px}
+@media(max-width:768px){.uniform-photo.md{width:52px}.matrix-title{gap:12px}.uniform-photo.lg{width:104px}}

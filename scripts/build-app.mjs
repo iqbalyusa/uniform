@@ -9,7 +9,7 @@ const kept=await readFile(manifest,'utf8').then(JSON.parse).catch(()=>readdir(as
 for(const file of kept)if(/^[a-zA-Z0-9._-]+$/.test(file))await readFile(join(assetsDir,file)).then(body=>previous.set(file,body),()=>{});
 await rm(dist,{recursive:true,force:true});
 const publicDir=join(dist,'public');await mkdir(publicDir,{recursive:true});await cp('public',publicDir,{recursive:true});
-const client=await build({entryPoints:['app/client.tsx'],outdir:join(publicDir,'assets'),bundle:true,splitting:true,format:'esm',platform:'browser',minify:true,metafile:true,entryNames:'app-[hash]',chunkNames:'chunk-[hash]',publicPath:'/assets/',define:{'process.env.NODE_ENV':'"production"'},target:['es2022'],loader:{'.woff2':'file','.woff':'file','.png':'file'},logLevel:'info'});
+const client=await build({entryPoints:['app/client.tsx'],outdir:join(publicDir,'assets'),bundle:true,splitting:true,format:'esm',platform:'browser',minify:true,metafile:true,entryNames:'app-[hash]',chunkNames:'chunk-[hash]',publicPath:'/assets/',define:{'process.env.NODE_ENV':'"production"'},target:['es2022'],loader:{'.woff2':'file','.woff':'file','.png':'file','.webp':'file'},logLevel:'info'});
 const outputs=Object.keys(client.metafile.outputs),main=outputs.find(p=>client.metafile.outputs[p].entryPoint==='app/client.tsx'&&p.endsWith('.js')),css=outputs.find(p=>p.endsWith('.css'));
 if(!main||!css)throw Error('Browser entry or stylesheet missing');
 const name=p=>p.split('/').pop();

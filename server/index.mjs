@@ -7,7 +7,7 @@ import {createHash,timingSafeEqual} from 'node:crypto';
 import {openDatabase,projectRoot} from './database.mjs';
 
 const security={'X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"};
-const types={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',png:'image/png',svg:'image/svg+xml',woff:'font/woff',woff2:'font/woff2'};
+const types={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',png:'image/png',webp:'image/webp',svg:'image/svg+xml',woff:'font/woff',woff2:'font/woff2'};
 const maxBody=3000000;
 
 // SERAGAM_ORIGIN pins the public address (e.g. https://uniform.pribadidepok.sch.id) when a proxy hides it.

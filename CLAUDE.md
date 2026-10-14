@@ -17,6 +17,7 @@ Uniform inventory app for Pribadi school (SD/SMP/SMA). UI and README are in Indo
 - Database: one SQLite file via `node:sqlite`. `server/database.mjs` runs `drizzle/*.sql` migrations (table `school_migrations`) and adapts SQLite to the small interface in `lib/database.ts`.
 - `npm run build` (esbuild, `scripts/build-app.mjs`) writes `dist/public` (page + hashed assets) and `dist/api.mjs`. It keeps the previous build's assets.
 - Business rules: `lib/server.ts`. Uniforms, sizes and the **staff list**: `lib/catalog.ts` (`staffNames`).
+- Uniform photos: the owner drops large originals into `/assets` (Git-ignored), named like the uniform (capitals ignored). `python scripts/uniform-images.py` (needs Pillow) crops them to one 4:5 frame, writes small WebP files to `app/assets/uniforms` and regenerates `app/uniform-images.ts`; commit those. A renamed uniform needs a renamed photo.
 - Accounts are off (`lib/access.ts`, `accountsEnabled=false`); everyone edits in shared mode. The old account mode depended on ChatGPT/Sites sign-in, which no longer exists.
 - Optional login: env `SERAGAM_PASSWORD` (+ `SERAGAM_USER`, default `seragam`). The owner turned it **off**.
 

@@ -271,3 +271,7 @@ Preserve the removed workspace/database/mode labels and explanation card. Stock 
 ## Staff on stock movements
 
 Stok masuk and Stok keluar end with a required Staff selector after Catatan and before Save. Options are Anna Ratna, Afro Mutmainah, and Rahmawati, with no name selected by default. One selection applies to every uniform in a student purchase. The selected staff name is stored separately from the request actor, appears in activity lists, can be searched, and is included in history exports and backups. Legacy records keep their original attribution.
+
+## Uniform photos
+
+Each of the 21 uniforms has a studio photo, cropped by `scripts/uniform-images.py` to one 4:5 portrait frame with the garment centred at the same scale. Photos sit in a thin-bordered frame with a soft surface behind it and appear next to the uniform name, never instead of it: 36px in the overview table, beside every Nama seragam select, and in the purchase review; 64px (52px on mobile) on each Data stok card; 120px (104px on mobile) in the movement preview. The Data stok and preview photos open a larger photo in a modal dialog (Esc, backdrop or the 44px close button closes it; focus returns to the photo). Small photos are lazy-loaded WebP with reserved space, so nothing shifts while they load; they stay silent for screen readers because the name is beside them. A uniform without a photo shows the Shirt icon in the same frame.
