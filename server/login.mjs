@@ -7,17 +7,17 @@ const same=(a,b)=>{const digest=v=>createHash('sha256').update(String(v)).digest
 const escape=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 export const loginCss=`*{box-sizing:border-box}
-body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px 16px;background:#f2f5f9;color:#1c2733;font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.login{width:100%;max-width:400px;padding:32px;background:#fff;border:1px solid rgba(18,35,60,.16);border-radius:16px;text-align:center}
+body{margin:0;min-height:100dvh;display:flex;flex-direction:column;padding:24px 16px 10vh;background:#f2f5f9;color:#1c2733;font-family:'Inter',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.login{width:100%;max-width:400px;margin:auto;padding:32px;background:#fff;border:1px solid rgba(18,35,60,.16);border-radius:16px;text-align:center}
 .login img{display:block;width:64px;height:64px;margin:0 auto 16px;object-fit:contain}
 h1{margin:0;color:#12233c;font-size:24px;line-height:1.25;font-weight:700;letter-spacing:-.02em}
 .login>p{margin:6px 0 24px;color:#5a6472}
-form{display:grid;gap:6px;text-align:left}
-label{color:#12233c;font-size:13px;font-weight:600}
+form{display:grid;text-align:left}
+label{margin-bottom:10px;color:#12233c;font-size:13px;font-weight:600}
 input{width:100%;min-height:44px;padding:10px 12px;border:1px solid rgba(18,35,60,.16);border-radius:8px;background:#fff;color:#12233c;font:inherit;font-size:16px}
 input:focus-visible,button:focus-visible{outline:3px solid #0172bb;outline-offset:2px}
-.error{margin:4px 0 0;color:#dc2626;font-size:13px}
-button{margin-top:12px;min-height:44px;border:0;border-radius:8px;background:#0172bb;color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.error{margin:8px 0 0;color:#dc2626;font-size:13px}
+button{margin-top:16px;min-height:44px;border:0;border-radius:8px;background:#0172bb;color:#fff;font:inherit;font-weight:600;cursor:pointer}
 button:hover{background:color-mix(in srgb,#0172bb 80%,#12233c)}`;
 
 function page(error){
