@@ -21,6 +21,20 @@ Uniform inventory app for Pribadi school (SD/SMP/SMA). UI and README are in Indo
 - Accounts are off (`lib/access.ts`, `accountsEnabled=false`); everyone edits in shared mode. The old account mode depended on ChatGPT/Sites sign-in, which no longer exists.
 - Optional login: env `SERAGAM_PASSWORD` (+ `SERAGAM_USER`, default `seragam`). The owner turned it **off**.
 
+## Design system (follow it for every UI change)
+
+All Pribadi apps share one look so they feel like one product. The owner wants it consistent, professional and free of the "AI template" look.
+
+- **Brand:** `design-system/sekolah-pribadi-depok/MASTER.md`. It is a copy of the school's design system, shared with the website and the Parent–Teacher Consultation app (`E:\Appointment App for Teachers`, GitHub `pribadi-school/appointment`). If the brand changes, update every copy.
+- **This app's rules:** `design-system/sekolah-pribadi-depok/pages/uniform-app.md`, which wins over MASTER.md. It covers:
+  - the flat app style, the same as the appointment app
+  - action blue `#0172bb`, never `#18a8fa`, for buttons and blue text
+  - 1px borders, no shadows or gradients
+  - stock status colours, and the type scale
+  - **no icons inside coloured tiles or circles**
+- **Tokens:** `app/globals.css` `:root`. Use them; never add a stray hex value. Inter is bundled via `@fontsource/inter`, because the CSP blocks Google Fonts.
+- `DESIGN.md` only points to these files. `.impeccable/` is an outdated record from an earlier design tool, so ignore it.
+
 ## Live hosting (Hostinger cPanel, LiteSpeed/CloudLinux)
 
 | What | Where |
