@@ -1,4 +1,4 @@
-export const staffNames=['Anna Ratna','Afro Mutmainah','Rahmawati'] as const;
+export const staffNames=['Anna Ratna Ningsih','Afro Mutmainah','Rahmawati'] as const;
 export const uniforms = [
  ['Kemeja Nasional SD Putra','Nasional','SD'],['Kemeja Nasional SD Putri','Nasional','SD'],['Celana Nasional SD','Nasional','SD'],['Rok Nasional SD','Nasional','SD'],
  ['Kemeja Nasional SMP Putra','Nasional','SMP'],['Kemeja Nasional SMP Putri','Nasional','SMP'],['Celana Nasional SMP','Nasional','SMP'],['Rok Nasional SMP','Nasional','SMP'],
@@ -17,5 +17,5 @@ export const itemForKey=(key:string)=>uniforms[Number(key.split('|')[0])];
 export function localDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}
 export type Balance={quantity:number;revision:number};
 export type Member={id:string;email:string;name:string;role:'admin'|'staff'|'shared';active:number;user_id?:string|null};
-export type Activity={id:string;key:string|null;action:string;actor:string;actor_id:string;occurred_at:string;date:string;before_qty:number|null;after_qty:number|null;delta:number|null;student_name:string;student_class:string;staff_name?:string;note:string;source:string};
+export type Activity={id:string;key:string|null;action:string;actor:string;actor_id:string;occurred_at:string;date:string;before_qty:number|null;after_qty:number|null;delta:number|null;student_name:string;student_class:string;staff_name?:string;note:string;source:string;edited_at?:string|null;edit_log?:string};
 export type Snapshot={stock:Record<string,Balance>;history:Activity[];lowLimit:number;revision:number;accessMode:'accounts'|'shared';member:Member;members:Member[];backups:{id:string;created_at:string;actor:string}[]};

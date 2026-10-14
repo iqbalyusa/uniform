@@ -39,7 +39,7 @@ test('Node server serves the page and the inventory API',async()=>{
   assert.equal(await (await fetch(origin+'/')).text(),'<html>rebuilt</html>','a rebuild must show without restarting');
   assert.equal((await fetch(origin+'/../secret.txt')).status,404);
   assert.equal((await fetch(origin+'/.env')).status,404);
-  const move={id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',staffName:'Anna Ratna',quantity:2,revision:0,date:'2026-01-01'};
+  const move={id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',staffName:'Anna Ratna Ningsih',quantity:2,revision:0,date:'2026-01-01'};
   const post=headers=>fetch(origin+'/api/movement',{method:'POST',headers:{'content-type':'application/json',...headers},body:JSON.stringify(move)});
   assert.equal((await post({origin:'https://evil.example'})).status,403);
   const saved=await post({origin});assert.equal(saved.status,200,await saved.clone().text());

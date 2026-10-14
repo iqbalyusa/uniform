@@ -80,6 +80,28 @@ async function purchase(member:Member,data:any){
  }
  return {id,items:lines.length,quantity:lines.reduce((total,line)=>total+line.quantity,0)};
 }
+// Edits fix the details of a stock movement (date, student, staff, note). Quantities and stock never change here;
+// each edit keeps the previous values in edit_log, and a whole multi-uniform purchase is edited together.
+const editableActions=['Masuk','Keluar','Penyesuaian'];
+export async function editHistory(member:Member,data:any){
+ inventoryEditor(member);const db=database();const id=required(data.id,'ID aktivitas',200),base=id.split(':')[0];
+ const target=await db.prepare('SELECT * FROM history WHERE id=?').bind(id).first<any>();
+ if(!target)throw new ApiError('Aktivitas tidak ditemukan.',404);
+ if(!editableActions.includes(target.action))throw new ApiError('Hanya stok masuk, keluar, dan penyesuaian yang dapat diubah.');
+ if((target.edited_at??null)!==(data.editedAt??null))throw new ApiError('Aktivitas ini baru saja diubah. Muat ulang lalu coba kembali.',409);
+ const date=data.date;if(typeof date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date))||date>localDate())throw new ApiError('Tanggal tidak valid atau berada di masa depan.');
+ const note=target.action==='Penyesuaian'?required(data.note,'Alasan penyesuaian',1000):String(data.note??'').slice(0,1000);
+ const student=target.action==='Keluar'?required(data.studentName,'Nama siswa'):'',cls=target.action==='Keluar'?required(data.studentClass,'Kelas',50):'';
+ let staff='';if(target.action!=='Penyesuaian'){staff=required(data.staffName,'Staff',100);if(staff!==target.staff_name&&!staffNames.some(name=>name===staff))throw new ApiError('Pilih Staff dari daftar yang tersedia.');}
+ const rows=target.action==='Keluar'?(await db.prepare("SELECT * FROM history WHERE action='Keluar' AND (id=? OR instr(id,?)=1)").bind(base,base+':').all<any>()).results:[target];
+ const next={date,student_name:student,student_class:cls,staff_name:staff,note};
+ if(rows.every(row=>Object.entries(next).every(([k,v])=>row[k]===v)))return {unchanged:true};
+ const now=new Date().toISOString();
+ const statements=rows.map(row=>db.prepare("UPDATE history SET date=?,student_name=?,student_class=?,staff_name=?,note=?,edited_at=?,edit_log=json_insert(edit_log,'$[#]',json(?)) WHERE id=? AND edited_at IS ?").bind(date,student,cls,staff,note,now,JSON.stringify({at:now,by:member.name,before:Object.fromEntries(Object.keys(next).map(k=>[k,row[k]]))}),row.id,row.edited_at??null));
+ const result=await db.batch([...statements,db.prepare('UPDATE settings SET revision=revision+1 WHERE id=1')]);
+ if(result.slice(0,rows.length).some(r=>!r.meta.changes))throw new ApiError('Aktivitas ini baru saja diubah. Muat ulang lalu coba kembali.',409);
+ return {edited:rows.length};
+}
 export async function changeMember(member:Member,data:any){
  if(!accountsEnabled)throw new ApiError('Pengelolaan akun dinonaktifkan sementara.',404);
  admin(member);const db=database();const email=required(data.email,'Email',254).toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new ApiError('Alamat email tidak valid.');const name=required(data.name,'Nama petugas',100);if(!['admin','staff'].includes(data.role))throw new ApiError('Peran tidak valid.');const active=data.active===0?0:1;const existing=await db.prepare('SELECT * FROM members WHERE email=?').bind(email).first<Member>();if(existing?.id===member.id&&(!active||data.role!=='admin'))throw new ApiError('Anda tidak dapat mencabut akses administrator sendiri.');const id=existing?.id??crypto.randomUUID();

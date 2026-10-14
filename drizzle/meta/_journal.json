@@ -22,6 +22,13 @@
       "when": 1791865880124,
       "tag": "0002_movement_staff",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1791987124988,
+      "tag": "0003_history_edits",
+      "breakpoints": true
     }
   ]
 }

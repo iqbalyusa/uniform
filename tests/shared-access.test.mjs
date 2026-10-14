@@ -17,7 +17,7 @@ async function fixture(){
  const post=(path,data,origin='https://example.com')=>route.POST(new Request(`https://example.com/api/${path}`,{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify(data)}));
  return {sqlite,get,post};
 }
-const move=(data={})=>({id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',staffName:'Anna Ratna',quantity:2,revision:0,date:'2026-01-01',...data});
+const move=(data={})=>({id:crypto.randomUUID(),key:'13|Baru|9',action:'Masuk',staffName:'Anna Ratna Ningsih',quantity:2,revision:0,date:'2026-01-01',...data});
 
 test('anonymous state is editable, officer records stay private and recoverable',async()=>{
  const {sqlite,get,post}=await fixture();const before=sqlite.prepare('SELECT * FROM members ORDER BY id').all();
@@ -56,4 +56,28 @@ test('simultaneous anonymous issues keep one winning revision and cannot overdra
  const {sqlite,post}=await fixture();const results=await Promise.all([post('movement',move({action:'Keluar',quantity:7,studentName:'A',studentClass:'7A'})),post('movement',move({action:'Keluar',quantity:7,studentName:'B',studentClass:'7B'}))]);
  assert.deepEqual(results.map(r=>r.status).sort(),[200,409]);assert.equal(sqlite.prepare("SELECT quantity FROM stock WHERE key='13|Baru|9'").get().quantity,3);
  assert.equal(sqlite.prepare('SELECT COUNT(*) AS n FROM history').get().n,1);sqlite.close();
+});
+test('history details can be edited with a trail; quantities, stock and other entries cannot',async()=>{
+ const {sqlite,get,post}=await fixture();
+ const purchase={id:crypto.randomUUID(),action:'Keluar',items:[{key:'13|Baru|9',quantity:2,revision:0},{key:'14|Baru|9',quantity:1,revision:0}],studentName:'Budi',studentClass:'7A',staffName:'Anna Ratna Ningsih',date:'2026-01-01',note:''};
+ sqlite.exec("INSERT INTO stock (key,quantity,revision) VALUES ('14|Baru|9',5,0)");
+ assert.equal((await post('movement',purchase)).status,200);
+ const edit=(data)=>post('history-edit',{id:purchase.id,editedAt:null,date:'2026-01-02',studentName:'Budi Santoso',studentClass:'7B',staffName:'Rahmawati',note:'Nama dibetulkan',...data});
+ assert.equal((await edit({studentName:''})).status,400);
+ assert.equal((await edit({staffName:'Orang lain'})).status,400);
+ assert.equal((await edit({date:'2999-01-01'})).status,400);
+ assert.equal((await edit({},)).status,200);
+ const rows=sqlite.prepare("SELECT * FROM history WHERE action='Keluar' ORDER BY id").all();
+ assert.equal(rows.length,2);assert.ok(rows.every(r=>r.student_name==='Budi Santoso'&&r.student_class==='7B'&&r.staff_name==='Rahmawati'&&r.date==='2026-01-02'&&r.edited_at));
+ const log=JSON.parse(rows[0].edit_log);assert.equal(log.length,1);assert.equal(log[0].before.student_name,'Budi');assert.equal(log[0].before.staff_name,'Anna Ratna Ningsih');
+ assert.equal(sqlite.prepare("SELECT quantity FROM stock WHERE key='13|Baru|9'").get().quantity,8);
+ assert.equal((await edit({})).status,409,'a stale edit is refused');
+ assert.equal((await post('history-edit',{id:'missing',editedAt:null,date:'2026-01-01'})).status,404);
+ assert.equal((await post('settings',{lowLimit:7})).status,200);
+ const setting=sqlite.prepare("SELECT id FROM history WHERE action='Pengaturan'").get();
+ assert.equal((await post('history-edit',{id:setting.id,editedAt:null,date:'2026-01-01',note:'x'})).status,400);
+ assert.throws(()=>sqlite.exec("UPDATE history SET delta=99,edited_at='x',edit_log='[1,2,3]' WHERE action='Keluar'"),/audit is immutable/);
+ assert.throws(()=>sqlite.exec("UPDATE history SET note='quiet' WHERE action='Keluar'"),/audit is immutable/,'an edit without a trail entry is refused');
+ assert.throws(()=>sqlite.exec("DELETE FROM history"),/audit is immutable/);
+ const state=await (await get('state')).json();assert.ok(state.history.some(h=>h.edited_at));sqlite.close();
 });
