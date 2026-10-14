@@ -227,6 +227,7 @@ select:disabled,input:disabled,textarea:disabled{background:var(--color-surface-
 .activity-list{display:grid;margin:0 0 16px;border-top:1px solid var(--color-border)}
 .activity{padding:12px 0;border-bottom:1px solid var(--color-border)}
 .activity strong{display:block;color:var(--color-foreground);font-size:var(--fs-ui);font-weight:700}
+.activity-head{display:flex!important;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
 .activity p{margin-top:2px;font-size:var(--fs-ui);line-height:1.5;overflow-wrap:anywhere}
 .activity small{display:block;margin-top:2px;color:var(--color-muted-foreground);font-size:var(--fs-caption)}
 
