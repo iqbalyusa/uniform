@@ -59,7 +59,9 @@ Each status combines colour with a word, so colour is never the only cue.
 color-mix(accent 70%, foreground) ≈ #af512a, 5.2:1 on white. MASTER reserves
 the raw orange for human elements; the darkened mix is a separate warning role
 derived from it, used only for low stock (cells, the "Perlu diperiksa" count,
-the alert banner and "Keluar" badges). Errors use `--color-destructive`.
+and the alert banner). Errors use `--color-destructive`.
+
+**History labels (owner request):** "Keluar" is a red box (`destructive` on `destructive-tint` with a 1px ring) and "Masuk" a green box (`--color-success` #15803d on `success-tint`). Green is an app extension outside MASTER, used only for these Masuk/valid labels.
 
 Notices are a palette tint with navy text and a 1px border of the same hue:
 `action-tint` for information, `warning-tint` for the low-stock alert,
