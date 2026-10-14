@@ -3,8 +3,8 @@ import {readFileSync,statSync,existsSync} from 'node:fs';
 import {resolve,sep} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {gzipSync} from 'node:zlib';
-import {createHash,timingSafeEqual} from 'node:crypto';
 import {openDatabase,projectRoot} from './database.mjs';
+import {createLoginGate} from './login.mjs';
 
 const security={'X-Content-Type-Options':'nosniff','Referrer-Policy':'same-origin','Permissions-Policy':'camera=(), microphone=(), geolocation=()','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'"};
 const types={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',png:'image/png',webp:'image/webp',svg:'image/svg+xml',woff:'font/woff',woff2:'font/woff2'};
@@ -17,21 +17,16 @@ function requestOrigin(req){
  return `${proto==='https'?'https':'http'}://${req.headers.host||'localhost'}`;
 }
 
-// Optional shared login (browser password prompt). Replaces the private access the old hosting provided.
-function authorized(req,user,password){
- const digest=value=>createHash('sha256').update(value).digest();
- return timingSafeEqual(digest(req.headers.authorization||''),digest('Basic '+Buffer.from(`${user}:${password}`).toString('base64')));
-}
-
-export async function startServer({port=Number(process.env.PORT||3000),host=process.env.HOST,databasePath,apiFile=resolve(projectRoot,'dist/api.mjs'),publicRoot=resolve(projectRoot,'dist/public'),user=process.env.SERAGAM_USER||'seragam',password=process.env.SERAGAM_PASSWORD}={}){
+export async function startServer({port=Number(process.env.PORT||3000),host=process.env.HOST,databasePath,apiFile=resolve(projectRoot,'dist/api.mjs'),publicRoot=resolve(projectRoot,'dist/public'),password=process.env.SERAGAM_PASSWORD}={}){
  if(!existsSync(apiFile))throw Error('Build missing. Run `npm run build` first.');
  const api=await import(pathToFileURL(apiFile).href);
  const {sqlite,DB,databasePath:path}=openDatabase(databasePath);api.setDatabase(DB);
- const cache=new Map();
+ const cache=new Map(),gate=password?createLoginGate(password):null;
  const server=createServer(async(req,res)=>{
   try{
-   if(password&&!authorized(req,user,password)){res.writeHead(401,{...security,'WWW-Authenticate':'Basic realm="Manajemen Seragam", charset="UTF-8"'});res.end('Masuk diperlukan');return;}
    const origin=requestOrigin(req),url=new URL(req.url||'/',origin);
+   // Optional password-only sign-in; it answers the request itself when no valid session is present.
+   if(gate&&await gate(req,res,url,origin,security))return;
    if(url.pathname.startsWith('/api/')){
     const method=req.method||'GET';
     if(!['GET','POST'].includes(method)){res.writeHead(405,{...security,Allow:'GET, POST','Content-Type':'application/json'});res.end(JSON.stringify({error:'Metode tidak didukung.'}));return;}

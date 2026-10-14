@@ -19,7 +19,7 @@ Uniform inventory app for Pribadi school (SD/SMP/SMA). UI and README are in Indo
 - Business rules: `lib/server.ts`. Uniforms, sizes and the **staff list**: `lib/catalog.ts` (`staffNames`).
 - Uniform photos: the owner drops large originals into `/assets` (Git-ignored), named like the uniform (capitals ignored). `python scripts/uniform-images.py` (needs Pillow) crops them to one 4:5 frame, writes small WebP files to `app/assets/uniforms` and regenerates `app/uniform-images.ts`; commit those. A renamed uniform needs a renamed photo.
 - Accounts are off (`lib/access.ts`, `accountsEnabled=false`); everyone edits in shared mode. The old account mode depended on ChatGPT/Sites sign-in, which no longer exists.
-- Optional login: env `SERAGAM_PASSWORD` (+ `SERAGAM_USER`, default `seragam`). The owner turned it **off**.
+- Optional login: env `SERAGAM_PASSWORD` turns on a password-only sign-in page (`server/login.mjs`, no username) with a 30-day session cookie and a Keluar link. Changing the password signs everyone out. After changing it in cPanel, restart with `pkill -f "lsnode:/home/pribadisch/repositories/uniform"`.
 
 ## Design system (follow it for every UI change)
 

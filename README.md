@@ -31,8 +31,7 @@ Variabel lingkungan:
 | Nama | Fungsi | Bawaan |
 |---|---|---|
 | `SERAGAM_DATABASE_PATH` | Lokasi berkas database | `~/seragam-data/inventory.sqlite` |
-| `SERAGAM_PASSWORD` | Kata sandi masuk (prompt browser). **Wajib diisi untuk hosting online.** | kosong = tanpa kata sandi |
-| `SERAGAM_USER` | Nama pengguna untuk kata sandi di atas | `seragam` |
+| `SERAGAM_PASSWORD` | Kata sandi masuk: halaman masuk hanya meminta password (tanpa nama pengguna). Mengganti password mengeluarkan semua orang. | kosong = tanpa kata sandi |
 | `SERAGAM_ORIGIN` | Alamat publik, mis. `https://uniform.pribadidepok.sch.id`, bila proxy menyembunyikan HTTPS | dibaca dari permintaan |
 | `PORT` | Port server | `3000` |
 

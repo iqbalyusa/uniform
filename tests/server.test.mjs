@@ -65,16 +65,25 @@ test('the stock snapshot is gzip-compressed for browsers that accept it',async()
  }finally{await new Promise(done=>server.close(done));}
 });
 
-test('SERAGAM_PASSWORD locks the page and API behind a login',async()=>{
+test('SERAGAM_PASSWORD shows a password-only sign-in page and locks the app and API',async()=>{
  const publicRoot=join(dir,'locked'),apiFile=join(dir,'api-locked.mjs');
- mkdirSync(publicRoot);writeFileSync(join(publicRoot,'index.html'),'<html>seragam</html>');
+ mkdirSync(join(publicRoot,'assets'),{recursive:true});writeFileSync(join(publicRoot,'index.html'),'<html>seragam</html>');writeFileSync(join(publicRoot,'assets','app.js'),'1');
  await build({entryPoints:['server/api.ts'],outfile:apiFile,bundle:true,format:'esm',platform:'node',logLevel:'silent'});
- const server=await startServer({port:0,host:'127.0.0.1',databasePath:join(dir,'locked.sqlite'),apiFile,publicRoot,user:'staff',password:'rahasia'});
- const origin=`http://127.0.0.1:${server.address().port}`,login=(user,password)=>({authorization:'Basic '+Buffer.from(`${user}:${password}`).toString('base64')});
+ const server=await startServer({port:0,host:'127.0.0.1',databasePath:join(dir,'locked.sqlite'),apiFile,publicRoot,password:'rahasia'});
+ const origin=`http://127.0.0.1:${server.address().port}`,form=password=>fetch(origin+'/login',{method:'POST',redirect:'manual',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({password})});
  try{
-  const anonymous=await fetch(origin+'/api/state');assert.equal(anonymous.status,401);assert.match(anonymous.headers.get('www-authenticate'),/^Basic /);
-  assert.equal((await fetch(origin+'/',{headers:login('staff','salah')})).status,401);
-  assert.equal((await fetch(origin+'/',{headers:login('staff','rahasia')})).status,200);
-  assert.equal((await fetch(origin+'/api/state',{headers:login('staff','rahasia')})).status,200);
+  const page=await fetch(origin+'/');assert.equal(page.status,200);const html=await page.text();
+  assert.match(html,/type="password"/);assert.doesNotMatch(html,/username|seragam<\/html>/i,'only a password field, not the app');
+  assert.equal(page.headers.get('www-authenticate'),null,'no browser username/password prompt');
+  assert.equal((await fetch(origin+'/api/state')).status,401);
+  assert.equal((await fetch(origin+'/assets/app.js')).status,200,'hashed browser files carry no data');
+  const wrong=await form('salah');assert.equal(wrong.status,401);assert.match(await wrong.text(),/Password salah/);assert.equal(wrong.headers.get('set-cookie'),null);
+  const right=await form('rahasia');assert.equal(right.status,303);const cookies=right.headers.getSetCookie();
+  assert.ok(cookies.some(c=>/^seragam_session=[0-9a-f]{64};.*HttpOnly/.test(c)));
+  const cookie=cookies.map(c=>c.split(';')[0]).join('; ');
+  assert.equal(await (await fetch(origin+'/',{headers:{cookie}})).text(),'<html>seragam</html>');
+  assert.equal((await fetch(origin+'/api/state',{headers:{cookie}})).status,200);
+  assert.equal((await fetch(origin+'/api/state',{headers:{cookie:'seragam_session='+'0'.repeat(64)}})).status,401,'a forged cookie is refused');
+  const out=await fetch(origin+'/logout',{redirect:'manual',headers:{cookie}});assert.equal(out.status,303);assert.ok(out.headers.getSetCookie().some(c=>/^seragam_session=;.*Max-Age=0/.test(c)));
  }finally{await new Promise(done=>server.close(done));}
 });

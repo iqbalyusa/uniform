@@ -127,6 +127,9 @@ table,.metrics,.stock-preview,.purchase-review,.pagination,.matrix-total,.number
 .sidebar nav button:hover{background:var(--color-surface-page);color:var(--color-foreground)}
 .sidebar nav button.active{background:var(--color-action-tint);color:var(--color-action);font-weight:600}
 .sidebar-bottom{margin-top:auto}
+.logout{display:flex;align-items:center;gap:12px;min-height:44px;padding:10px 12px;border-top:1px solid var(--color-border);border-radius:0;color:var(--color-muted-foreground);font-size:var(--fs-body);font-weight:500;transition:color var(--motion-fast) ease}
+.logout:hover{color:var(--color-destructive)}
+.logout svg{flex-shrink:0;stroke-width:1.75}
 .account{display:flex;align-items:center;gap:10px;border-top:1px solid var(--color-border);padding:16px 4px 0}
 .avatar{width:32px;height:32px;flex-shrink:0;border-radius:var(--radius-md);background:var(--color-surface-muted);color:var(--color-foreground);display:grid;place-items:center;font-size:var(--fs-caption);font-weight:700}
 .account>div{flex:1;min-width:0}
