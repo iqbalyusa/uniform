@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-14T03:11:14.697Z",
+  "generatedAt": "2026-10-14T03:17:10.862Z",
   "title": "Design System: Pribadi · Manajemen Seragam",
   "extensions": {
     "colorMeta": {
@@ -243,216 +243,6 @@
           "oklch(95% 0.065 75)"
         ],
         "canonical": "#faf2e2"
-      },
-      "dark-bg": {
-        "role": "neutral",
-        "displayName": "Deep Navy Ground",
-        "tonalRamp": [
-          "oklch(15% 0.04 255)",
-          "oklch(27% 0.04 255)",
-          "oklch(39% 0.04 255)",
-          "oklch(51% 0.04 255)",
-          "oklch(63% 0.04 255)",
-          "oklch(75% 0.04 255)",
-          "oklch(87% 0.04 255)",
-          "oklch(95% 0.04 255)"
-        ],
-        "canonical": "#0c1625"
-      },
-      "dark-surface": {
-        "role": "neutral",
-        "displayName": "Navy Working Surface",
-        "tonalRamp": [
-          "oklch(15% 0.04 255)",
-          "oklch(27% 0.04 255)",
-          "oklch(39% 0.04 255)",
-          "oklch(51% 0.04 255)",
-          "oklch(63% 0.04 255)",
-          "oklch(75% 0.04 255)",
-          "oklch(87% 0.04 255)",
-          "oklch(95% 0.04 255)"
-        ],
-        "canonical": "#142237"
-      },
-      "dark-surface-soft": {
-        "role": "neutral",
-        "displayName": "Soft Navy Surface",
-        "tonalRamp": [
-          "oklch(15% 0.04 255)",
-          "oklch(27% 0.04 255)",
-          "oklch(39% 0.04 255)",
-          "oklch(51% 0.04 255)",
-          "oklch(63% 0.04 255)",
-          "oklch(75% 0.04 255)",
-          "oklch(87% 0.04 255)",
-          "oklch(95% 0.04 255)"
-        ],
-        "canonical": "#1a2c43"
-      },
-      "dark-ink": {
-        "role": "neutral",
-        "displayName": "Light Ink",
-        "tonalRamp": [
-          "oklch(15% 0.04 255)",
-          "oklch(27% 0.04 255)",
-          "oklch(39% 0.04 255)",
-          "oklch(51% 0.04 255)",
-          "oklch(63% 0.04 255)",
-          "oklch(75% 0.04 255)",
-          "oklch(87% 0.04 255)",
-          "oklch(95% 0.04 255)"
-        ],
-        "canonical": "#edf4fd"
-      },
-      "dark-muted": {
-        "role": "neutral",
-        "displayName": "Blue Gray Ink",
-        "tonalRamp": [
-          "oklch(15% 0.012 255)",
-          "oklch(27% 0.012 255)",
-          "oklch(39% 0.012 255)",
-          "oklch(51% 0.012 255)",
-          "oklch(63% 0.012 255)",
-          "oklch(75% 0.012 255)",
-          "oklch(87% 0.012 255)",
-          "oklch(95% 0.012 255)"
-        ],
-        "canonical": "#adbed4"
-      },
-      "dark-line": {
-        "role": "neutral",
-        "displayName": "Navy Divider",
-        "tonalRamp": [
-          "oklch(15% 0.012 255)",
-          "oklch(27% 0.012 255)",
-          "oklch(39% 0.012 255)",
-          "oklch(51% 0.012 255)",
-          "oklch(63% 0.012 255)",
-          "oklch(75% 0.012 255)",
-          "oklch(87% 0.012 255)",
-          "oklch(95% 0.012 255)"
-        ],
-        "canonical": "#32465e"
-      },
-      "dark-accent": {
-        "role": "primary",
-        "displayName": "Light Action Blue",
-        "tonalRamp": [
-          "oklch(15% 0.085 240)",
-          "oklch(27% 0.085 240)",
-          "oklch(39% 0.085 240)",
-          "oklch(51% 0.085 240)",
-          "oklch(63% 0.085 240)",
-          "oklch(75% 0.085 240)",
-          "oklch(87% 0.085 240)",
-          "oklch(95% 0.085 240)"
-        ],
-        "canonical": "#7dccfa"
-      },
-      "dark-accent-hover": {
-        "role": "primary",
-        "displayName": "Light Blue Hover",
-        "tonalRamp": [
-          "oklch(15% 0.085 240)",
-          "oklch(27% 0.085 240)",
-          "oklch(39% 0.085 240)",
-          "oklch(51% 0.085 240)",
-          "oklch(63% 0.085 240)",
-          "oklch(75% 0.085 240)",
-          "oklch(87% 0.085 240)",
-          "oklch(95% 0.085 240)"
-        ],
-        "canonical": "#ade1ff"
-      },
-      "dark-accent-soft": {
-        "role": "primary",
-        "displayName": "Selected Navy Blue",
-        "tonalRamp": [
-          "oklch(15% 0.085 240)",
-          "oklch(27% 0.085 240)",
-          "oklch(39% 0.085 240)",
-          "oklch(51% 0.085 240)",
-          "oklch(63% 0.085 240)",
-          "oklch(75% 0.085 240)",
-          "oklch(87% 0.085 240)",
-          "oklch(95% 0.085 240)"
-        ],
-        "canonical": "#193b59"
-      },
-      "dark-rail": {
-        "role": "neutral",
-        "displayName": "Navy Navigation",
-        "tonalRamp": [
-          "oklch(15% 0.04 255)",
-          "oklch(27% 0.04 255)",
-          "oklch(39% 0.04 255)",
-          "oklch(51% 0.04 255)",
-          "oklch(63% 0.04 255)",
-          "oklch(75% 0.04 255)",
-          "oklch(87% 0.04 255)",
-          "oklch(95% 0.04 255)"
-        ],
-        "canonical": "#102037"
-      },
-      "dark-red": {
-        "role": "secondary",
-        "displayName": "Light Error Red",
-        "tonalRamp": [
-          "oklch(15% 0.08 25)",
-          "oklch(27% 0.08 25)",
-          "oklch(39% 0.08 25)",
-          "oklch(51% 0.08 25)",
-          "oklch(63% 0.08 25)",
-          "oklch(75% 0.08 25)",
-          "oklch(87% 0.08 25)",
-          "oklch(95% 0.08 25)"
-        ],
-        "canonical": "#f3a99f"
-      },
-      "dark-red-soft": {
-        "role": "secondary",
-        "displayName": "Dark Error Surface",
-        "tonalRamp": [
-          "oklch(15% 0.08 25)",
-          "oklch(27% 0.08 25)",
-          "oklch(39% 0.08 25)",
-          "oklch(51% 0.08 25)",
-          "oklch(63% 0.08 25)",
-          "oklch(75% 0.08 25)",
-          "oklch(87% 0.08 25)",
-          "oklch(95% 0.08 25)"
-        ],
-        "canonical": "#462d29"
-      },
-      "dark-amber": {
-        "role": "secondary",
-        "displayName": "Light Attention Amber",
-        "tonalRamp": [
-          "oklch(15% 0.065 75)",
-          "oklch(27% 0.065 75)",
-          "oklch(39% 0.065 75)",
-          "oklch(51% 0.065 75)",
-          "oklch(63% 0.065 75)",
-          "oklch(75% 0.065 75)",
-          "oklch(87% 0.065 75)",
-          "oklch(95% 0.065 75)"
-        ],
-        "canonical": "#e9c58a"
-      },
-      "dark-amber-soft": {
-        "role": "secondary",
-        "displayName": "Dark Attention Surface",
-        "tonalRamp": [
-          "oklch(15% 0.065 75)",
-          "oklch(27% 0.065 75)",
-          "oklch(39% 0.065 75)",
-          "oklch(51% 0.065 75)",
-          "oklch(63% 0.065 75)",
-          "oklch(75% 0.065 75)",
-          "oklch(87% 0.065 75)",
-          "oklch(95% 0.065 75)"
-        ],
-        "canonical": "#3a3223"
       }
     },
     "typographyMeta": {
@@ -505,7 +295,7 @@
       {
         "name": "panel-ambient",
         "value": "0 2px 8px #12233c04",
-        "purpose": "Near-invisible hairline lift under working panels (dark: 0 2px 8px #000e2710)."
+        "purpose": "Near-invisible hairline lift under working panels."
       },
       {
         "name": "primary-hover",
@@ -518,14 +308,9 @@
         "purpose": "Zoom badge on a uniform photo."
       },
       {
-        "name": "toast-light",
+        "name": "toast",
         "value": "0 8px 30px #12233c14",
-        "purpose": "Transient feedback in light mode."
-      },
-      {
-        "name": "toast-dark",
-        "value": "0 8px 30px #000e2738",
-        "purpose": "Transient feedback in dark mode."
+        "purpose": "Transient feedback."
       }
     ],
     "motion": [
@@ -666,7 +451,7 @@
   ],
   "narrative": {
     "northStar": "The School Stock Workspace",
-    "overview": "Pribadi’s school identity gives daily stock administration a clear, coherent home. White navigation and working surfaces carry navy text, while blue identifies actions, selected sizes, and active destinations. The official school logo sits directly on the sidebar with no colored box; retain its original red detail and proportions.\n\nThe workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, settings, and the optional navy dark theme. Temporary shared mode hides application sign-in and officer management; the rail omits technical connection and shared-mode labels. Preserved account screens remain available when account enforcement is restored.",
+    "overview": "Pribadi’s school identity gives daily stock administration a clear, coherent home. White navigation and working surfaces carry navy text, while blue identifies actions, selected sizes, and active destinations. The official school logo sits directly on the sidebar with no colored box; retain its original red detail and proportions.\n\nThe workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, and settings. Temporary shared mode hides application sign-in and officer management; the rail omits technical connection and shared-mode labels. Preserved account screens remain available when account enforcement is restored.",
     "keyCharacteristics": [
       "White working surfaces and navy hierarchy",
       "Blue actions, selection, and focus",
@@ -704,7 +489,7 @@
       "Do preserve selected-size centering and exact-cell movement handoff.",
       "Do keep uniform names and totals visible on mobile.",
       "Do pair stock and validation colors with explicit Indonesian labels.",
-      "Do respect dark-theme role mapping and reduced-motion preference.",
+      "Do respect the reduced-motion preference.",
       "Do give every piece of text a role from the type scale, and keep touch targets at 44px."
     ],
     "donts": [

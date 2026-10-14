@@ -18,20 +18,6 @@ colors:
   red-soft: "#fff0ed"
   amber: "#8a5e1a"
   amber-soft: "#faf2e2"
-  dark-bg: "#0c1625"
-  dark-surface: "#142237"
-  dark-surface-soft: "#1a2c43"
-  dark-ink: "#edf4fd"
-  dark-muted: "#adbed4"
-  dark-line: "#32465e"
-  dark-accent: "#7dccfa"
-  dark-accent-hover: "#ade1ff"
-  dark-accent-soft: "#193b59"
-  dark-rail: "#102037"
-  dark-red: "#f3a99f"
-  dark-red-soft: "#462d29"
-  dark-amber: "#e9c58a"
-  dark-amber-soft: "#3a3223"
 typography:
   headline:
     fontFamily: "'Geist', 'Geist Fallback', system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif"
@@ -193,7 +179,7 @@ components:
 
 Pribadi’s school identity gives daily stock administration a clear, coherent home. White navigation and working surfaces carry navy text, while blue identifies actions, selected sizes, and active destinations. The official school logo sits directly on the sidebar with no colored box; retain its original red detail and proportions.
 
-The workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, settings, and the optional navy dark theme. Temporary shared mode hides application sign-in and officer management; the rail omits technical connection and shared-mode labels. Preserved account screens remain available when account enforcement is restored.
+The workspace is compact and operational. Tables, direct Indonesian labels, visible quantities, and quick entry take priority. School identity comes from the palette, typography, and logo rather than decorative illustrations. The same language carries through stock lookup, movement, history, imports, and settings. Temporary shared mode hides application sign-in and officer management; the rail omits technical connection and shared-mode labels. Preserved account screens remain available when account enforcement is restored.
 
 **Key Characteristics:**
 - White working surfaces and navy hierarchy
@@ -205,7 +191,7 @@ The workspace is compact and operational. Tables, direct Indonesian labels, visi
 
 ## Colors
 
-The school palette combines bright identity blue with a darker action blue and cool working neutrals. Frontmatter is normative for both themes; dark-prefixed tokens are the implemented dark overrides.
+The school palette combines bright identity blue with a darker action blue and cool working neutrals. Frontmatter is normative.
 
 ### Primary
 
@@ -222,8 +208,6 @@ Error Red and its pale background communicate validation failures and low-stock 
 ### Neutral
 
 White surfaces hold editable fields and data. Cool Ground separates the workspace from those surfaces; Soft Surface distinguishes headers and secondary areas. Muted Ink carries supporting labels, and Divider defines rows and section boundaries. The light rail uses the same white, navy, and muted ink roles as working surfaces.
-
-Dark mode maps these roles to the dark-prefixed tokens: deep navy ground, navy surfaces, light text, blue-gray borders, and light blue actions. The rail uses `dark-rail`, and focus uses `dark-accent`. Red and amber retain their meaning with the dark semantic tokens. The school logo has a transparent background in either theme.
 
 ## Typography
 
@@ -245,7 +229,7 @@ One family, ten steps. Every piece of text takes a role, never a loose size. The
 - **Label (12px):** table headers, helper text, captions and activity detail.
 - **Micro (11px):** level tags, badges, size-cell units and states, the connection note and the footer.
 
-Weights in use are 400, 500 and 600, the three files that are loaded. Numerals are tabular in tables, metrics, stock preview and purchase review so columns line up. Dark mode adds a little tracking and line height to keep light text on navy easy to read. A metric-matched Arial fallback (`Geist Fallback`) keeps the layout from jumping while Geist loads.
+Weights in use are 400, 500 and 600, the three files that are loaded. Numerals are tabular in tables, metrics, stock preview and purchase review so columns line up. A metric-matched Arial fallback (`Geist Fallback`) keeps the layout from jumping while Geist loads.
 
 **The Quantity Rule.** Show the complete quantity, its size-system context, and a readable unit or state. Do not truncate numeric data to make a table fit.
 
@@ -265,7 +249,7 @@ Keep uniform name and total visible around the horizontal matrix, and keep size-
 
 This is a mostly flat system. White and soft surfaces, thin divider strokes, and spacing establish depth. The selected movement segment is a bordered white control with no shadow. Toasts use the ambient shadow; drawer depth comes from its navy backdrop. Avoid adding heavy shadows to ordinary panels.
 
-Shadow vocabulary: panels carry a near-invisible ambient hairline (`0 2px 8px #12233c04`, `#000e2710` in dark); a filled primary button gains `0 3px 9px #0069aa18` on hover; the photo zoom hint uses `0 1px 3px #12233c26`; toasts use `0 8px 30px #12233c14` in light and `0 8px 30px #000e2738` in dark. Motion is restrained: buttons, rail items, size cells and links ease color and background changes over 0.18s; the page heading arrives with a 0.22s ease-out rise of 4px; the mobile drawer slides over 0.2s; pressed buttons move down 1px; reduced-motion preference disables all of it.
+Shadow vocabulary: panels carry a near-invisible ambient hairline (`0 2px 8px #12233c04`); a filled primary button gains `0 3px 9px #0069aa18` on hover; the photo zoom hint uses `0 1px 3px #12233c26`; toasts use `0 8px 30px #12233c14`. Motion is restrained: buttons, rail items, size cells and links ease color and background changes over 0.18s; the page heading arrives with a 0.22s ease-out rise of 4px; the mobile drawer slides over 0.2s; pressed buttons move down 1px; reduced-motion preference disables all of it.
 
 **The Flat Workspace Rule.** Give stock data a stable plane; reserve floating depth for transient feedback and navigation overlays.
 
@@ -279,7 +263,7 @@ Panels and the metrics block use the panel radius (16px); fields and main action
 
 Primary actions are compact filled blue controls (44px minimum height, 13px, weight 600), with the primary frontmatter tokens and a darker hover that adds a faint blue lift. Secondary actions are white with a divider border and weight 500; hover adds a soft surface and stronger border. Text actions use blue, gain an underline on hover, and remain secondary to a filled action. Primary and secondary pressed states move down 1px. Disabled controls show half opacity and a disabled cursor.
 
-All keyboard targets use a 3px theme-aware focus outline with a 3px offset. Preserve text labels beside SVG icons where the action needs a destination or result.
+All keyboard targets use a 3px focus outline with a 3px offset. Preserve text labels beside SVG icons where the action needs a destination or result.
 
 ### Inputs / Fields
 
@@ -321,7 +305,7 @@ The import workflow uses the same panel, field, button, and status language. A d
 - **Do** preserve selected-size centering and exact-cell movement handoff.
 - **Do** keep uniform names and totals visible on mobile.
 - **Do** pair stock and validation colors with explicit Indonesian labels.
-- **Do** respect dark-theme role mapping and reduced-motion preference.
+- **Do** respect the reduced-motion preference.
 - **Do** give every piece of text a role from the type scale, and keep touch targets at 44px.
 
 ### Don't:
@@ -346,7 +330,7 @@ Direction: preserve the Pribadi identity while modernising a task-focused school
 
 Audit: the original hierarchy made four stock totals equally prominent, labels and tables were small, and spacing differed between stock, movement, and history screens. The update emphasises total inventory with a pale blue cell, strengthens page titles and numeric hierarchy, and aligns controls, table text, and spacing across the workflow. Navigation keeps its labels and highlights the selected destination without a decorative dot.
 
-Desktop navigation is 248px wide, narrowing to 224px on compact screens; mobile uses the existing off-canvas drawer. Headlines use 32px desktop and 24–26px mobile. Controls use 44px or larger targets, 13–14px desktop text, and 16px mobile field text. Panels use 16px corners and controls use 10px corners. Hover and press feedback are restrained; the short page-heading entrance respects reduced motion. Dark mode preserves the same hierarchy and semantic status colours.
+Desktop navigation is 248px wide, narrowing to 224px on compact screens; mobile uses the existing off-canvas drawer. Headlines use 32px desktop and 24–26px mobile. Controls use 44px or larger targets, 13–14px desktop text, and 16px mobile field text. Panels use 16px corners and controls use 10px corners. Hover and press feedback are restrained; the short page-heading entrance respects reduced motion.
 
 Preserve the removed workspace/database/mode labels and explanation card. Stock matrices retain horizontal scrolling, exact-size handoff, and complete quantities. Multiple-item student purchases retain atomic saving, validation, and their complete before/after stock review.
 
