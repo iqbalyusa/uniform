@@ -5,8 +5,8 @@ export const metadata: Metadata = {
   title: "Pribadi · Manajemen Seragam",
   description: "Stok seragam bersama untuk SD, SMP, dan SMA Pribadi.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
   },
 };
 
